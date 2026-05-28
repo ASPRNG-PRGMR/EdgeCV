@@ -14,21 +14,43 @@ EdgeCV/
 ├── src/
 |   ├── cam_sanity.py
 |   ├── mnist_cnn_camera.py
-|   └── downscale.py
-└── models/
-    └── mnist_cnn_int8.tmdl  # Trained INT8 CNN weights (emlearn format)
+├── models/
+|    └── mnist_cnn_int8.tmdl  # Trained INT8 CNN weights (emlearn format)
+└── firmware
+     ├── esp-dev.bin # micropython firmware for esp32 dev module
+     └── esp-cam.bin # micropython firmware for esp32 cam module 
 ```
 
 ---
 
 ## Hardware
 
-| Component | Notes |
-|---|---|
-| ESP32 Dev Board | Main MCU |
-| OV3660 Camera Module | Attached via parallel interface |
-| USB–UART adapter | Flashing and serial monitor |
-| Host PC (Linux / WSL) | Tooling, `esptool`, `picocom` |
+| Component             | Notes                           |
+|-----------------------|---------------------------------|
+| ESP32 Dev Board       | Main MCU                        |
+| OV3660 Camera Module  | Attached via parallel interface |
+| USB–UART adapter      | Flashing and serial monitor     |
+| Host PC (Linux / WSL) | Tooling, `esptool`, `picocom`   |
+
+---
+
+## Firmware Binaries
+
+This repository includes tested MicroPython firmware binaries for convenience and reproducibility.
+
+Original firmware source:
+
+* https://micropython.org/download/
+
+Included binaries:
+
+| Board            | Firmware                             |
+| ---------------- | ------------------------------------ |
+| ESP32 Dev Module | `ESP32_GENERIC-20250415-v1.25.0.bin` |
+| ESP32-CAM        | `firmware.bin`                       |
+
+These binaries are included to preserve a known-working environment for the current prototype.
+
 
 ---
 
@@ -95,7 +117,7 @@ esptool.py \
     --baud 460800 \
     write_flash \
     -z 0x1000 \
-    ESP32_GENERIC-<version>.bin
+    <firmware-name>.bin
 ```
 
 Replace `ESP32_GENERIC-<version>.bin` with the actual filename you downloaded.

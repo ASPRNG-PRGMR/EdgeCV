@@ -12,6 +12,7 @@ Pipeline
     96×96 greyscale capture
         → average-pool to 32×32   (downscale module)
         → centre-crop to 28×28    (crop32to28)
+        → horizontal flip         (mirror each row in-place)
         → binary threshold        (white digit on black background)
         → INT8 CNN inference      (emlearn_cnn_int8)
         → predicted digit + time  (printed to serial)
@@ -37,17 +38,15 @@ import emlearn_cnn_int8
 # ---------------------------------------------------------------------------
 
 MODEL_PATH     = "mnist_cnn_int8.tmdl"
-CAPTURE_SIZE   = 96    # OV3660 capture resolution (square, pixels per side)
-POOL_SIZE      = 32    # intermediate size after average pooling
-CROP_SIZE      = 28    # final size fed to the model (MNIST native resolution)
-CROP_OFFSET    = (POOL_SIZE - CROP_SIZE) // 2   # = 2 pixels from each edge
-THRESHOLD      = 120   # pixels above this → 255 (digit), else → 0 (background)
-LOOP_DELAY_MS  = 50    # inter-frame sleep; helps camera stability
-ERROR_DELAY_MS = 200   # sleep after an exception before retrying
+CAPTURE_SIZE   = 96
+POOL_SIZE      = 32
+CROP_SIZE      = 28
+CROP_OFFSET    = (POOL_SIZE - CROP_SIZE) // 2   # = 2
+THRESHOLD      = 120
+LOOP_DELAY_MS  = 50
+ERROR_DELAY_MS = 200
+NUM_CLASSES    = 10
 
-NUM_CLASSES    = 10    # digits 0-9
-
-# Camera pin mapping for a typical ESP32-CAM board
 DATA_PINS = [5, 18, 19, 21, 36, 39, 34, 35]
 
 # ---------------------------------------------------------------------------
@@ -55,7 +54,6 @@ DATA_PINS = [5, 18, 19, 21, 36, 39, 34, 35]
 # ---------------------------------------------------------------------------
 
 def argmax(arr) -> int:
-    """Return the index of the maximum value in arr."""
     idx_max = 0
     val_max = arr[0]
     for i in range(1, len(arr)):
@@ -66,17 +64,23 @@ def argmax(arr) -> int:
 
 
 def crop32to28(src, dst) -> None:
-    """
-    Centre-crop a flat 32×32 buffer into a flat 28×28 buffer.
-    Removes CROP_OFFSET (2) pixels from each edge.
-    """
     for r in range(CROP_SIZE):
         for c in range(CROP_SIZE):
             dst[r * CROP_SIZE + c] = src[(r + CROP_OFFSET) * POOL_SIZE + (c + CROP_OFFSET)]
 
 
+def hflip_inplace(buf, width) -> None:
+    """Mirror each row of a flat square buffer horizontally, in-place."""
+    for r in range(width):
+        row_start = r * width
+        row_end   = row_start + width - 1
+        for c in range(width // 2):
+            l = row_start + c
+            r2 = row_end - c
+            buf[l], buf[r2] = buf[r2], buf[l]
+
+
 def threshold_inplace(buf, cutoff: int) -> None:
-    """Binarise buf in-place: values > cutoff → 255, else → 0."""
     for i in range(len(buf)):
         buf[i] = 255 if buf[i] > cutoff else 0
 
@@ -111,10 +115,10 @@ print("camera: ok")
 with open(MODEL_PATH, "rb") as f:
     model_data = array.array("B", f.read())
 
-model       = emlearn_cnn_int8.new(model_data)
-probs       = array.array("f", (0.0 for _ in range(NUM_CLASSES)))
-scaled32    = array.array("B", (0 for _ in range(POOL_SIZE  * POOL_SIZE)))
-scaled28    = array.array("B", (0 for _ in range(CROP_SIZE  * CROP_SIZE)))
+model    = emlearn_cnn_int8.new(model_data)
+probs    = array.array("f", (0.0 for _ in range(NUM_CLASSES)))
+scaled32 = array.array("B", (0 for _ in range(POOL_SIZE * POOL_SIZE)))
+scaled28 = array.array("B", (0 for _ in range(CROP_SIZE * CROP_SIZE)))
 
 print("model: ready")
 
@@ -126,7 +130,6 @@ while True:
     try:
         t0 = time.ticks_ms()
 
-        # --- Capture --------------------------------------------------------
         img = cam.capture()
         if img is None:
             print("capture: failed — skipping frame")
@@ -135,15 +138,14 @@ while True:
         buf = bytes(img)
         cam.free_buffer()
 
-        # --- Preprocess -----------------------------------------------------
         downscale.downscale(buf, scaled32, CAPTURE_SIZE, POOL_SIZE)
         crop32to28(scaled32, scaled28)
+        hflip_inplace(scaled28, CROP_SIZE)   # fix mirrored camera output
         threshold_inplace(scaled28, THRESHOLD)
 
-        # --- Inference ------------------------------------------------------
         model.run(scaled28, probs)
-        digit    = argmax(probs)
-        elapsed  = time.ticks_diff(time.ticks_ms(), t0)
+        digit   = argmax(probs)
+        elapsed = time.ticks_diff(time.ticks_ms(), t0)
 
         print(f"digit: {digit}  time: {elapsed} ms")
 
