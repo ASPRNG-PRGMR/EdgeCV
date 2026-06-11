@@ -1,0 +1,5 @@
+dataset/
+best_model.keras
+debug_frame.jpg
+__pycache__/
+*.pyc
