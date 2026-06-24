@@ -1,0 +1,29 @@
+# sdkconfig.defaults
+# ==================
+# edgecv_camera_probe — additions on top of your existing model_probe defaults.
+#
+# Merge these into your existing sdkconfig.defaults, or append to it.
+# The entries already present in your proven model_probe sdkconfig are NOT
+# repeated here — only the new / changed ones are listed.
+
+# ---------------------------------------------------------------------------
+# Camera frame buffer in PSRAM
+# ---------------------------------------------------------------------------
+# Required for fb_location = CAMERA_FB_IN_PSRAM to work.
+# Your existing config already has CONFIG_SPIRAM=y, which is the prerequisite.
+CONFIG_CAMERA_ENABLE_PSRAM=y
+
+# ---------------------------------------------------------------------------
+# Stack size for app_main
+# ---------------------------------------------------------------------------
+# The camera driver allocates some state on the calling task's stack during
+# esp_camera_init().  The default main task stack (3584 bytes) is often too
+# small once TFLite Micro's static objects are also in play.
+# 8 KB is safe; 16 KB is comfortable for debugging.
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# ---------------------------------------------------------------------------
+# LEDC (used by camera driver for XCLK PWM)
+# ---------------------------------------------------------------------------
+# Already enabled by default in ESP-IDF, but make it explicit.
+CONFIG_LEDC_TIMER_RESOLUTION=14

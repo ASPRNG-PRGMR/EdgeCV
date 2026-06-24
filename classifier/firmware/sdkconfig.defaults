@@ -1,0 +1,24 @@
+# sdkconfig.defaults — classifier/firmware
+#
+# Base configuration shared by all three entry points (model_probe,
+# camera_probe, inference). Camera-specific additions that only matter
+# once esp32-camera is in use live in sdkconfig.defaults.camera_additions
+# — merge that file in as well before building camera_probe or inference.
+
+# ---------------------------------------------------------------------------
+# PSRAM — required for model buffer, tensor arena, and camera frame buffers
+# ---------------------------------------------------------------------------
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_QUAD=y
+CONFIG_SPIRAM_SPEED_40M=y
+CONFIG_SPIRAM_USE_MALLOC=y
+
+# ---------------------------------------------------------------------------
+# SDMMC — SD card mount used by all three entry points to load model.tflite
+# ---------------------------------------------------------------------------
+CONFIG_FATFS_LFN_HEAP=y
+
+# ---------------------------------------------------------------------------
+# Main task stack — generous size since TFLite Micro keeps some state here
+# ---------------------------------------------------------------------------
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192

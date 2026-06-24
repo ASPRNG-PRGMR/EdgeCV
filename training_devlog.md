@@ -1,533 +1,568 @@
-# ESP32-CAM Classifier — Development Log
-### Project: `custom cnn for esp-cam` | Started: `cup` vs `mobile` → Iterated to: `guava` vs `powerbank`
+# EdgeCV Training Devlog
+
+This document is the full development journal for the EdgeCV custom image
+classifier. Every phase, every bug, every fix — written as it happened.
 
 ---
 
 ## Overview
 
-This document tracks the full journey of building a custom image classifier
-for an ESP32-CAM (OV3660 sensor) — from reverse-engineering an existing Edge
-Impulse deployment, to writing a training script from scratch, to debugging
-a series of increasingly subtle problems, to ultimately changing the object
-classes entirely because the original pair was too visually similar.
+The goal: train a small image classifier to distinguish two objects and run
+it in real time on an ESP32-CAM with no server, no WiFi, no SD card.
 
-The goal is a working .tflite model that fits on the ESP32-CAM and can
-eventually drive a rover autonomously.
+The journey took eleven phases across two major model generations:
 
----
-
-## Phase 1 — Reverse Engineering the Original Edge Impulse Model
-
-### Starting point
-
-The project began with an existing (but not understood) Edge Impulse deployment.
-The files provided were:
-
-- `esp32_camera.ino` — Arduino sketch running inference
-- `tflite_learn_1018948_4_compiled.cpp/.h` — EON-compiled TFLite model (weights baked into C arrays)
-- `trained_model_ops_define.h` — list of disabled TFLite op variants
-- `model_metadata.h` — classifier configuration macros
-- `model_variables.h` — full impulse definition including class labels
-
-Edge Impulse's EON compiler converts a .tflite model into a C++ file where
-all weights, tensor shapes, and operator registrations are hardcoded as arrays.
-By reading those arrays we can reconstruct the original architecture.
-
-### What the C++ files revealed
-
-| Detail | How we found it | Value |
-|---|---|---|
-| Input shape | `tensor_dimension0 = {4, {1,96,96,1}}` | 96×96 grayscale, 1 channel |
-| Conv block 1 | `tensor_data6[16*3*3*1]` — weight array size | 16 filters, 3×3 kernel |
-| Conv block 2 | `tensor_data2[32*3*3*16]` — weight array size | 32 filters, 3×3 kernel |
-| Flatten size | `tensor_data3 = {-1, 18432}` | 24×24×32 = 18432 (matches 2 pooling layers) |
-| Output | `tensor_data5[2]` — 2 output weights | 2 classes |
-| Quantization | All int8/u8 variants disabled in ops_define.h | Float32 model, not quantized |
-| Class labels | `ei_classifier_inferencing_categories[]` in model_variables.h | `{ "cup", "mobile" }` |
-
-### Initial architecture guess (mostly right, one mistake)
-
-```
-Input (96, 96, 1) grayscale
-→ Conv2D(16, 3×3) → ReLU → MaxPool(2×2)
-→ Conv2D(32, 3×3) → ReLU → MaxPool(2×2)
-→ Flatten (18432)
-→ Dense(128) → ReLU        ← assumed a hidden layer existed
-→ Dense(2) → Softmax
-```
-
-The mistake: we assumed there was a hidden Dense(128) layer because that's
-common. But the compiled graph has exactly 7 node invocations with only one
-`FULLY_CONNECTED` operator. There is no hidden layer — it goes straight from
-Flatten to the output.
-
-### Corrected architecture
-
-```
-Input (96, 96, 1) grayscale
-→ Conv2D(16, 3×3) → ReLU → MaxPool(2×2)
-→ Conv2D(32, 3×3) → ReLU → MaxPool(2×2)
-→ Flatten (18432)
-→ Dense(2) → Softmax       ← single FC directly to output
-```
+- **Phases 1–8**: training pipeline — from reverse-engineering someone
+  else's model to a working guava/powerbank classifier on a laptop
+- **Phases 9–10**: ESP32 deployment — memory probes, camera bringup,
+  MobileNetV2 on SD card, working end-to-end but slow (~5.7s)
+- **Phases 11–13**: TinyML rewrite — scratch CNN, int8 quantization,
+  model embedded in flash, **184ms inference, working perfectly**
 
 ---
 
-## Phase 2 — Writing the Training Script
+## Phase 1 — Reverse Engineering the Existing Pipeline
 
-### Decisions made upfront
+### Context
 
-**Switch to RGB.** The OV3660 captures colour frames. The original EI model
-used grayscale because that's what the DSP block was configured for, but there
-is no hardware reason to throw away colour information. RGB gives the model
-more signal to work with, especially if the two objects differ in colour.
+The project started with an existing Edge Impulse-based MicroPython demo
+running MNIST digit recognition on the ESP32-CAM. The goal was to replace
+it with a custom classifier for arbitrary objects.
 
-**Add a 3rd conv block.** Going from 1 channel (grayscale) to 3 channels
-(RGB) means 3× more input data. A deeper network can extract more useful
-features from that extra information.
+Before writing a single line of training code, the existing pipeline was
+reverse-engineered to understand:
+- What image format did the model expect?
+- How were pixels normalised?
+- How were predictions read from the output tensor?
 
-**Add Dense(128) hidden layer.** The original model had none, but we were
-now training from scratch on new classes. A hidden layer gives the network
-more capacity to combine spatial features before making a prediction.
+This took longer than expected because Edge Impulse's exported models
+embed preprocessing implicitly in the graph, and the documentation assumes
+you use their SDK end-to-end.
 
-**Add Dropout(0.5).** With only a few hundred images, the model can easily
-memorise training samples. Dropout forces it to learn more robust features
-by randomly disabling 50% of neurons during each training step.
+### Lesson
 
-### Resulting architecture
-
-```
-Input (96, 96, 3) RGB
-→ Conv2D(16) → BatchNorm → ReLU → MaxPool    output: 48×48×16
-→ Conv2D(32) → BatchNorm → ReLU → MaxPool    output: 24×24×32
-→ Conv2D(64) → BatchNorm → ReLU → MaxPool    output: 12×12×64
-→ Flatten (9216)
-→ Dense(128) → ReLU → Dropout(0.5)
-→ Dense(N) → Softmax
-```
-
-### Bugs caught immediately
-
-| Bug | What went wrong | Fix |
-|---|---|---|
-| `convert("L")` but `CHANNELS=3` | Images loaded as grayscale (1 channel) but model expected RGB (3 channels) — silent shape mismatch | Changed to `convert("RGB")` |
-| Seeds set before `import tensorflow` | `tf.keras.utils.set_random_seed()` called before tf existed — seeds did nothing | Moved all seed calls after imports |
-| `batch_size=32` | With ~300 training images, batches of 32 meant only 9 gradient updates per epoch — too few to learn | Changed to 16 |
-| `Dropout(0.1)` | Dropping only 10% of neurons is so mild it provides almost no regularisation | Changed to 0.4, later 0.5 |
+Reverse-engineer before you build. Know exactly what format and range the
+model expects, what the output means, and how the training pipeline
+produced the labels — before writing a single training image to disk.
 
 ---
 
-## Phase 3 — Class Collapse: Model Predicts One Class for Everything
+## Phase 2 — First Training Script
+
+### What was built
+
+`train_classifier.py` — a from-scratch training script using Keras. Initial
+architecture: a small scratch CNN with Conv2D, MaxPool, Dense layers.
+Classes: initially tried phone vs powerbank.
+
+### Problem
+
+The model trained to ~80% accuracy on validation but classified everything
+as one class on the test set. Per-class breakdown revealed one class was
+being correctly predicted and the other was never predicted at all.
+
+### Root cause
+
+The two classes — phone and powerbank — were visually near-identical at
+96×96 resolution. Both were dark rectangles with similar aspect ratios
+under similar lighting. The model learned to always predict the majority
+class because that minimised loss.
+
+### Fix
+
+Changed classes to **guava vs powerbank**: round green fruit vs flat dark
+rectangle. Maximum visual dissimilarity at 96×96.
+
+---
+
+## Phase 3 — Class Imbalance and class_weight
+
+### Problem
+
+Dataset sizes were unequal (155 guava, 164 powerbank). Training loss was
+erratic. Tried adding `class_weight` to `model.fit()`.
+
+### What happened
+
+`class_weight` is silently ignored when the dataset uses `.map()` for
+augmentation. The argument is accepted without error, has no effect, and
+no warning is raised. Hours spent debugging imagined learning rate issues.
+
+### Fix
+
+Removed `class_weight`. With guava/powerbank, the visual difference was
+sufficient that mild imbalance didn't matter — both classes trained cleanly
+without weighting.
+
+### Lesson
+
+`class_weight` does not work with datasets built using `.map()`. If you
+need it, bake weights into the dataset pipeline as a third tensor, or use
+`sample_weight` at the batch level.
+
+---
+
+## Phase 4 — BatchNorm Loss Spike
+
+### What happened
+
+Added `BatchNormalization` layers to stabilise training. On epoch 1, loss
+spiked to 30+ and never recovered. The model output ~50% for every class
+from that point forward — it had collapsed.
+
+### Root cause
+
+`BatchNormalization` tracks running statistics (mean, variance) across
+batches. When used with an augmentation pipeline that modifies images
+non-deterministically, the statistics are inconsistent between the forward
+pass and the normalisation update step. This causes the gradient signal to
+become contradictory and the network gets stuck at maximum entropy output.
+
+### Fix
+
+Removed all `BatchNormalization` layers. L2 regularisation added to Conv
+layers instead (weight decay = 0.001) to provide the overfitting resistance
+that BatchNorm was supposed to supply.
+
+### Lesson
+
+Never use BatchNorm in a pipeline where the dataset uses `.map()` for
+random augmentation without being very careful about the `training=True/False`
+flag propagation. For small models on small datasets, L2 regularisation
+is simpler and more predictable.
+
+---
+
+## Phase 5 — "Loss = 0.693" Means Nothing by Itself
+
+### Problem
+
+During debugging, loss consistently started at 0.693. This was interpreted
+as a sign that training had collapsed — 0.693 is `ln(2)`, the theoretical
+loss for a model outputting exactly 50% for every binary prediction.
+
+### What was actually happening
+
+0.693 is the *correct* starting loss for a randomly-initialised binary
+classifier. It means the model starts with no knowledge and improves from
+there. It only indicates collapse when the loss stays at 0.693 throughout
+training *and* the prediction distribution is uniform (all 50%).
+
+A model can have loss = 0.693 at epoch 1 and reach 97% accuracy by
+epoch 30 — this is normal.
+
+### Lesson
+
+Starting loss of 0.693 for binary cross-entropy is expected, not alarming.
+Look at whether loss *decreases* over epochs, and whether per-class accuracy
+is balanced, not just the starting value.
+
+---
+
+## Phase 6 — Background Bias
+
+### Problem
+
+Laptop test accuracy was excellent. Real-world accuracy was poor: the model
+predicted one class whenever the background was bright and the other whenever
+the background was dark, regardless of what object was in frame.
+
+### Root cause
+
+All training images of guava were taken against a white wall. All training
+images of powerbank were taken on a dark desk. The model never needed to
+learn anything about the objects — it learned background brightness.
+
+This is a dataset problem, not a model problem. The model did exactly what
+it was trained to do.
+
+### Fix
+
+Recollected all images with varied backgrounds: different surfaces, different
+lighting conditions, both objects photographed against both light and dark
+backgrounds. Dataset rebuild from scratch.
+
+### Lesson
+
+If pointing the camera at a white ceiling predicts one class and a dark desk
+predicts the other, the model learned the background. Vary backgrounds
+aggressively during data collection. The model must see both objects against
+both kinds of backgrounds.
+
+---
+
+## Phase 7 — MobileNetV2 Transfer Learning (and Why it Was Overkill)
+
+### What was tried
+
+Switched to MobileNetV2 pretrained on ImageNet with two-phase fine-tuning:
+frozen backbone first, then top-30-layers fine-tuned at LR=1e-5.
+
+### Result
+
+Excellent laptop accuracy. Model size: 2.77 MB float32.
+
+### The problem this created
+
+At 2.77 MB, the model is too large for SPIFFS. Required loading from SD
+card at boot. Inference time on ESP32: **~5.7 seconds per frame**.
+
+### Lesson
+
+MobileNetV2 is the wrong tool for two visually distinct classes with a
+small dataset. The extra capacity and pretrained features add nothing when
+the objects are a round green fruit and a flat black rectangle. The scratch
+TinyML CNN (built in Phase 11) outperformed it in speed by 30× at the cost
+of ~1% accuracy.
+
+---
+
+## Phase 8 — Dataset Pipeline Formalised
+
+### What was built
+
+Three Jupyter notebooks implementing a formal data preparation pipeline:
+
+**Notebook 1 — HSV Histogram Analysis**
+Analyses hue and value distributions per class to confirm the objects are
+distinguishable in colour space. Guava peaks around H=79 (green), powerbank
+peaks vary — confirmed the dataset was usable.
+
+**Notebook 2 — Hand Filtering**
+A senior collaborator wrote an HSV skin-tone segmentation script to remove
+hands from images. Method:
+- HSV threshold (H 5–25, S>40, V>40) to detect skin
+- Morphological open + dilate to clean noise and cover shadow fringe
+- Border-connected contour filter — only keep skin blobs touching the image
+  edge (the hand), discard internal warm-toned pixels (e.g. guava surface)
+- Fill hand region with histogram-sampled background colour
+
+The approach was sound. The flat-colour fill produced a visible "painted
+over" patch when the background had any texture or gradient.
+
+**Notebook 3 — Data Splitter**
+Rigorous 70/15/15 train/val/test split at the *file* level. Both original
+and hand-cleaned versions of each image are included in training, doubling
+the effective dataset size without additional collection.
+
+---
+
+## Phase 9 — ESP32 Deployment: Probe Strategy
+
+### Why probes
+
+With the model trained and validated on the laptop, the deployment risks
+were unknown. How much memory does a 2.77 MB model consume after
+AllocateTensors()? Can the camera coexist with the model in memory?
+
+Rather than write the full inference loop and debug memory, camera, and
+inference bugs simultaneously, deployment was split into isolated probes.
+Each probe answered exactly one question.
+
+### Probe 1 — Model load + AllocateTensors only
+
+No camera. Loads model from SD card into PSRAM, calls AllocateTensors().
+
+**Result: PASS.**
+
+```
+PSRAM free after AllocateTensors : ~204 KB
+Tensor arena allocated            : 1024 KB
+Actual arena usage                 : ~414 KB
+AllocateTensors() time             : ~149 ms
+```
+
+### Probe 2 — Camera coexistence
+
+Same model load as Probe 1. Camera initialised afterward. One grayscale
+frame captured.
+
+**Result: PASS.**
+
+```
+PSRAM free after AllocateTensors (before camera) : 204 KB
+PSRAM free after camera init                       : 195 KB
+PSRAM free with frame buffer held                  : 195 KB
+192 KB contiguous PSRAM remaining after everything.
+```
+
+### Lesson
+
+Probing one thing at a time means that when something breaks, it's
+immediately obvious which layer caused it. This paid off immediately in
+Phase 10.
+
+---
+
+## Phase 10 — OV3660 Does Not Support RGB888
+
+### The plan
+
+Model trained on RGB images. Configure camera for `PIXFORMAT_RGB888`,
+capture, fill float32 tensor, Invoke().
 
 ### What happened
 
 ```
-Val accuracy : 54.5%
-Val loss     : 0.6921
-Predicted : [77  0]    ← every single image predicted as mobile
-Actual    : [42 35]
+E (5110) cam_hal: cam_config: ll_cam_set_sample_mode failed
+E (5110) camera: Camera config failed with error 0xffffffff
+E (5110) INFERENCE: esp_camera_init failed: ESP_FAIL
 ```
 
-54.5% accuracy sounds almost reasonable — until you notice it predicts mobile
-for every image. Since 54.5% of the validation set is mobile, just saying
-"mobile" for everything gives 54.5% for free. The model learned nothing.
+The driver rejected the format before the sensor was even programmed.
 
-### What loss = 0.693 means
+### Root cause
 
-Loss of exactly 0.693 is not a coincidence. It equals −ln(0.5), which is the
-cross-entropy loss when the model outputs exactly 50% probability for each
-class on every image. The model is outputting maximum uncertainty — a coin
-flip — and it just happens to round to the majority class.
+The OV3660 outputs raw YUV422 over its parallel interface. The esp32-camera
+driver can software-convert that to JPEG or extract luma for GRAYSCALE.
+It has no RGB888 conversion path for OV3660. This is a driver limitation,
+not a wiring error. The same request works on OV2640.
 
-This is **class collapse**: the model abandons trying to learn the minority
-class because it gets a lower average loss by always predicting the majority.
+Supported formats for OV3660: `PIXFORMAT_JPEG`, `PIXFORMAT_YUV422`,
+`PIXFORMAT_GRAYSCALE`.
 
-### Why it happened: dataset imbalance
+### Fix
 
-Mobile had 210 images, powerbank had 172. A ~1.2× imbalance is mild but
-enough to tip a model that isn't explicitly penalised for ignoring one class.
+Use `PIXFORMAT_YUV422` and convert to RGB in firmware using BT.601
+full-range coefficients — the same coefficients PIL uses internally for
+`Image.convert("RGB")`, ensuring the camera's colour output is consistent
+with what the training images looked like.
 
-### Attempted fix: `class_weight=` in `model.fit()`
-
-```python
-model.fit(..., class_weight={0: 0.91, 1: 1.11})
+YUYV layout (4 bytes = 2 pixels):
+```
+Y0  U  Y1  V
 ```
 
-This tells Keras to weight mistakes on powerbank more heavily in the loss.
-
-**Result: model flipped to predicting powerbank for everything.**
-
+Conversion:
 ```
-Predicted : [0  77]    ← now every image predicted as powerbank
-Actual    : [42 35]
+R = clamp(Y + 1.402   * (V-128))
+G = clamp(Y - 0.34414 * (U-128) - 0.71414 * (V-128))
+B = clamp(Y + 1.772   * (U-128))
 ```
 
-The weights overshot and caused collapse in the opposite direction.
-
-### Why `class_weight=` didn't work properly
-
-Keras silently ignores `class_weight=` when the training dataset is a
-`tf.data.Dataset` with a `.map()` augmentation step. The argument is accepted
-without error, but the weights are never actually applied to the loss
-computation. This is a known but underdocumented Keras/tf.data interaction.
-
-### The real fix: sample weights baked into the dataset
-
-Instead of relying on Keras to apply weights, include them as a third tensor
-directly in the dataset:
-
-```python
-# Compute per-sample weights based on class
-sample_weights = np.array([class_weights_arr[label] for label in y_train])
-
-# Third element in the tuple — Keras reads this automatically
-train_ds = tf.data.Dataset.from_tensor_slices(
-    (X_train, y_train, sample_weights)
-)
-
-# Augmentation must pass the weight through unchanged
-def augment_with_weights(x, y, w):
-    return augment(x, training=True), y, w
+Integer approximation for speed (no FPU per pixel):
+```cpp
+r = clamp255(Y + ((179 * (V-128)) >> 7));
+g = clamp255(Y - ((44*(U-128) + 91*(V-128)) >> 7));
+b = clamp255(Y + ((227 * (U-128)) >> 7));
 ```
 
-When the dataset itself carries the weights, tf.data cannot drop them.
+### Bonus
+
+YUV422 frame buffers at 96×96 = 18 432 bytes. RGB888 would have been
+27 648 bytes — the forced format switch was also a free memory saving.
+
+### End-to-end result
+
+MobileNetV2 (float32, 2.77 MB from SD) running at ~5.7 seconds per frame.
+Working, but impractically slow. This became the motivation for Phase 11.
 
 ---
 
-## Phase 4 — Gradient Explosion: Loss = 33 on Epoch 1
+## Phase 11 — TinyML Scratch CNN (The Right Architecture All Along)
 
-### What happened after the sample weight fix
+### Motivation
 
-```
-Epoch 1: loss = 33.76    ← should be around 0.6-0.7
-Epoch 2: loss = 0.6926   ← immediately collapsed
-Epoch 3+: loss = 0.6930  ← stuck here forever
-```
-
-### What gradient explosion means
-
-On epoch 1, the model computed a loss of 33 instead of the expected ~0.7.
-That loss produced a gradient 50× larger than normal, which updated the
-weights by a massive amount in one step. The weights were effectively destroyed
-immediately, and the model could never recover — it sat at 0.693 for the rest
-of training.
-
-### Root cause: BatchNormalization + weighted inputs
-
-BatchNorm tracks running statistics (mean and variance) of activations across
-batches. It uses these to normalise each layer's output so training stays
-stable.
-
-The problem: on the very first batch, BatchNorm has no history and uses the
-current batch to initialise its statistics. When that batch comes from a
-`(image, label, weight)` dataset rather than a plain `(image, label)` dataset,
-the weighted inputs on the first pass produce statistics that are far from
-normal. This creates abnormally large activation values, which produce an
-enormous loss, which destroys the weights in one update.
-
-### How we confirmed it
-
-We ran a minimal test with completely random data (no real signal):
-
-```python
-X = np.random.rand(100, 96, 96, 3).astype('float32')
-y = np.array([0]*50 + [1]*50)
-# Result: loss = 33.76 on epoch 1, then 0.693 forever
-# Same exact pattern = same root cause
-```
-
-If it were a data issue, random data would not reproduce it.
-
-### Fix 1: Remove BatchNormalization
-
-Plain `Conv2D` with `activation="relu"` does not have this interaction:
-
-```python
-# Before (exploding):
-x = layers.Conv2D(16, (3,3), use_bias=False)(inp)
-x = layers.BatchNormalization()(x)
-x = layers.Activation("relu")(x)
-
-# After (stable):
-x = layers.Conv2D(16, (3,3), padding="same", activation="relu")(inp)
-```
-
-Note: `use_bias=False` is only appropriate when BatchNorm follows (BatchNorm
-has its own bias term). With BatchNorm removed, `use_bias` goes back to the
-default `True`.
-
-### Fix 2: Gradient clipping as a safety net
-
-```python
-optimizer=keras.optimizers.Adam(learning_rate=args.learning_rate, clipnorm=1.0)
-```
-
-`clipnorm=1.0` rescales the gradient so its magnitude never exceeds 1.0
-before the weight update. Even if something produces a large gradient, it
-cannot destroy the weights in a single step. With BatchNorm removed this
-shouldn't be needed, but it costs nothing to keep.
-
----
-
-## Phase 5 — Partial Progress: 72.7% but Mobile Still Weak
-
-### Results after gradient explosion fix
-
-```
-Val accuracy : 72.7%
-Per-class accuracy:
-  [0] mobile    : 22/42  (52.4%)
-  [1] powerbank : 27/35  (77.1%)
-```
-
-The model is genuinely learning both classes now (no collapse). But mobile
-accuracy at 52% is barely above random. The model finds powerbank easy
-(distinctive strap/connector visible from most angles) but struggles with
-mobile (flat rectangular slab, similar shape from most angles).
-
-### False alarm in the script
-
-The warning `"Loss is near 0.693"` was firing at 72.7% accuracy because the
-threshold `val_loss > 0.68` was too aggressive. A model can have val_loss of
-0.69 while still learning — the loss being near 0.693 only indicates a problem
-when the model is ALSO predicting only one class.
-
-Fix:
-```python
-# Before: fires on loss alone
-if val_loss > 0.68:
-
-# After: only fires on genuine collapse
-if val_loss > 0.68 and len(np.unique(pred_classes)) == 1:
-```
-
-### Also fixed: NameError crash
-
-`pred_classes` was referenced in the warning check before it was defined a
-few lines later. Fixed by moving `model.predict()` to before the warning.
-
----
-
-## Phase 6 — The Real Problem: Objects Are Visually Identical
-
-### Learning rate experiments showed the fundamental issue
-
-| LR | Mobile accuracy | Powerbank accuracy | Overall |
-|---|---|---|---|
-| 3e-4 | 52% | 77% | 72.7% |
-| 1e-4 | 81% | 31% | 58.4% |
-| 5e-5 | 45% | 74% | 58.4% |
-
-The model keeps trading one class for the other. Improving mobile hurts
-powerbank by exactly the same amount and vice versa. This is not a learning
-rate problem — the model is finding one shortcut feature and using it as a
-binary switch.
-
-### Colour statistics confirmed the problem
-
-```python
-mobile:    R=0.507  G=0.522  B=0.472   mean=0.500  std=0.196
-powerbank: R=0.506  G=0.517  B=0.474   mean=0.499  std=0.172
-```
-
-The two classes are colour-identical — less than 0.01 difference per channel.
-Both are grey/silver objects on similar backgrounds. RGB provides zero extra
-signal over grayscale. The model must distinguish them by shape and texture
-alone, at 96×96 resolution.
-
-### Real-world testing confirmed the background bias
-
-Testing with `test_laptop.py` revealed the model classifying faces and random
-office scenes as "mobile" with 0.82 confidence. The training images were taken
-against a white wall with the object close-up. The model learned to recognise
-the white background + rectangular object combination, not the object itself.
-
-When tested in a real environment with a busy background, the model had
-no idea what to do — because it had never seen a busy background in training.
-
-### Root cause summary
-
-Three compounding problems:
-1. **Too visually similar**: a phone and a powerbank are both dark rectangles
-2. **Colour provides no signal**: identical RGB stats between classes
-3. **Background bias**: training images used plain white backgrounds;
-   real-world backgrounds are complex
-
-No amount of learning rate tuning, architecture tweaking, or more epochs
-will fix these — they are data and class selection problems.
-
----
-
-## Phase 7 — Transfer Learning (MobileNetV2)
-
-### Why transfer learning helps
-
-A scratch CNN with 380 images must learn everything — edges, shapes, textures,
-object parts — from scratch. MobileNetV2 was trained on 1.2 million images
-across 1000 categories. It already knows how to detect shapes, textures, and
-object parts in a general way. We reuse those learned filters and only train
-the final classification layers on our data.
-
-This is called **transfer learning** — transferring visual knowledge from a
-large dataset to a small one.
+5.7 seconds per frame is usable for a static demo but not for anything
+interactive. MobileNetV2 was brought in because it was familiar, not
+because it was appropriate. The objects are visually distinct. A much
+smaller model should work.
 
 ### Architecture
 
 ```
-Input (96, 96, 3)
-→ preprocess_input       (rescale pixels from [0,1] to [-1,1] for MobileNetV2)
-→ MobileNetV2 backbone   (frozen, 154 layers, pretrained on ImageNet)
-→ GlobalAveragePooling2D (reduces (3,3,1280) → (1280,) — more efficient than Flatten)
-→ Dense(128, relu)
-→ Dropout(0.3)
-→ Dense(N, softmax)
+Input: (96, 96, 3) RGB
+Rescaling(1/255)          ← baked into weights, not applied manually
+Conv2D(8,  3×3, stride=2) + ReLU + MaxPool   → 23×23×8
+Conv2D(16, 3×3)           + ReLU + MaxPool   → 10×10×16
+Conv2D(16, 3×3)           + ReLU             →  8×8×16
+Flatten → Dropout(0.5) → Dense(16, ReLU) → Dense(1, sigmoid)
 ```
 
-### Two-phase training strategy
+Binary sigmoid output. Alphabetical class order: 0=guava, 1=powerbank.
 
-Training in two phases avoids accidentally destroying the pretrained weights.
+Quantized to int8: **~50 KB**. Fits in ESP32 flash. No SD card needed.
 
-**Phase 1 — Head only (backbone frozen):**
-The MobileNetV2 weights are locked. Only the Dense layers we added are
-trained. This is necessary because the new head starts with random weights
-and produces large gradients initially — if the backbone were unfrozen at
-this point, those gradients would corrupt it immediately.
+### Training improvements over v1/v2
 
-**Phase 2 — Fine-tuning (top 30 layers unfrozen):**
-After the head stabilises, the top 30 layers of MobileNetV2 are unlocked
-and trained at a very low learning rate (1e-5). The lower layers (which
-detect generic edges and colours) remain frozen. Only the higher-level feature
-detectors are adapted to distinguish phones from powerbanks.
-
-Very low LR is critical in Phase 2 — the pretrained weights are already good.
-We want tiny adjustments, not large updates.
-
-### Model size
-
-MobileNetV2 quantized comes to ~3.5 MB. This does NOT fit in ESP32 flash as
-a C array. It must be stored on SPIFFS or SD card and loaded at runtime.
-
-The scratch CNN quantized is ~1.2 MB and fits in SPIFFS with the default
-partition scheme.
+- Group-aware train/val split: all versions of one physical photo
+  (original + hand-cleaned) guaranteed to land in the same split.
+  Prevents leakage where the model sees the original in training and
+  the cleaned version in validation.
+- Calibration data fixed: int8 calibration now samples from the actual
+  training image paths, not the top-level dataset directory which
+  contained test subfolders and confused Keras into detecting 4 classes.
+- 50 calibration images instead of 15 — more stable quantization ranges.
 
 ---
 
-## Phase 8 — Class Change: Mobile/Powerbank → Guava/Powerbank
+## Phase 12 — The Int8 Firmware Bug (Why it Was Classifying Brightness)
 
-### Why we changed classes
+### Symptoms
 
-After all the above debugging, the conclusion was clear: mobile and powerbank
-are too visually similar for a small scratch CNN to reliably distinguish.
+After flashing the int8 TinyML model, predictions alternated between
+guava and powerbank in sync with scene brightness, not with what object
+was in frame:
 
-Both are:
-- Dark rectangular slabs
-- Similar size
-- Held in a hand against varying backgrounds
-- Colour-identical (RGB means differ by less than 0.01)
+```
+Frame 50: powerbank 99.6%   <- looking at powerbank
+Frame 51: guava 100.0%      <- pointing at ceiling
+Frame 52: powerbank 99.6%   <- back to powerbank
+Frame 53: guava 100.0%      <- ceiling again
+```
 
-The shape difference (camera bump vs cable port) is subtle at 96×96 pixels.
-Even MobileNetV2 was only marginally better because the core problem is the
-objects themselves, not the model.
+### Root cause
 
-### The new pair: guava vs powerbank
+`fill_input_tensor()` was writing **float32** values into an **int8**
+tensor. The model is exported with `inference_input_type = tf.int8`, so
+`input->type == kTfLiteInt8`. The old code wrote to `input->data.f` (the
+float32 union member) with values divided by 255.
 
-A round, green/yellow fruit vs a flat dark rectangle. These are about as
-visually different as two objects can be:
+What the model actually received was the byte pattern of a 32-bit IEEE 754
+float, reinterpreted as four int8 values. For example, `0.5f` =
+`0x3F000000` → four bytes `[0x3F, 0x00, 0x00, 0x00]` = int8 `[63, 0, 0, 0]`.
 
-- **Shape**: completely different (round vs rectangular)
-- **Colour**: completely different (green/yellow vs dark grey)
-- **Texture**: different (rough/bumpy vs smooth)
-- **Silhouette**: obvious at 96×96 resolution
+The model still produced confident binary outputs because it had learned to
+extract some consistent signal from this corrupted data — specifically, scene
+brightness, which partially survives the corruption because bright pixels
+produce slightly different float byte patterns than dark pixels. Hence the
+ceiling-vs-desk prediction.
 
-A scratch CNN of this size should reach 90%+ accuracy on this pair without
-any of the tricks needed for mobile/powerbank.
+### Fix
 
-### What changes in the script
+New function `fill_input_tensor_int8()` writes to `input->data.int8` and
+converts each uint8 RGB value to int8 by subtracting 128:
 
-- Folder names: `guava/` and `powerbank/`
-- Class order (alphabetical): `[0] guava`, `[1] powerbank`
-- Update `LABELS` in `test_laptop.py` to `["guava", "powerbank"]`
-- Everything else stays the same
+```cpp
+int8_val = (int8_t)(uint8_rgb_pixel - 128);
+```
 
-### Training recommendations for the new dataset
+This is the correct mapping: the quantization zero_point is -128, meaning
+uint8=0 maps to int8=-128 and uint8=255 maps to int8=127.
 
-- 100-150 images per class minimum
-- Varied backgrounds (not just white wall — this was the key lesson)
-- Varied distances (close, arm's length, far)
-- Varied orientations (upright, sideways, tilted)
-- With and without hand in frame
-- Different lighting conditions
+**Do not divide by 255** — the `layers.Rescaling(1/255)` layer inside the
+model is baked into the int8 weights during quantization. Applying it
+again would compress the full [-128, 127] input range into approximately
+[-0.5, 0.5], which looks like all-grey images to the model.
+
+### Additional bug: calibration pointing at wrong directory
+
+`convert_to_tflite_int8()` in v2 pointed the representative dataset
+generator at `DATASET_DIR` (the top-level folder). This directory contained:
+```
+guava/
+powerbank/
+test_guava/
+test_powerbank/
+```
+Keras's `image_dataset_from_directory` detected **four** subfolders and
+treated them as four classes. The calibration distribution was wrong,
+skewing the quantization zero_point and scale parameters. Fixed by
+calibrating directly on the list of training file paths.
 
 ---
 
-## Summary of All Fixes
+## Phase 13 — Working: 184ms Inference
 
-| # | Problem | Symptom | Fix |
+### Build
+
+The TinyML model is embedded into firmware flash using `xxd`:
+
+```bash
+xxd -i model.tflite > firmware/main/model_data.cc
+```
+
+`model_data.h` declares the array. The firmware reads directly from flash
+— no SD card, no PSRAM model buffer, no file I/O at boot.
+
+### Compilation error: `int32_t` format specifier
+
+```
+error: format '%d' expects argument of type 'int',
+       but argument has type 'int32_t' {aka 'long int'} [-Werror=format]
+```
+
+ESP-IDF's toolchain defines `int32_t` as `long int`. The `%d` specifier
+expects plain `int`. Anywhere `dims->data[N]`, `params.zero_point`, or
+`->type` is passed to `ESP_LOGI`, it must be cast to `(int)`:
+
+```cpp
+// Wrong:
+ESP_LOGI(TAG, "dims=[%d]", input->dims->data[0]);
+// Correct:
+ESP_LOGI(TAG, "dims=[%d]", (int)(input->dims->data[0]));
+```
+
+This only affects log lines — the inference logic is unaffected.
+
+### Final result
+
+```
+I (xxxx) TINYML: AllocateTensors OK — arena used 48 KB of 256 KB
+I (xxxx) TINYML: --- Frame 9 ---
+I (xxxx) TINYML:   guava     : 0.0625  (6.2%)
+I (xxxx) TINYML:   powerbank : 0.9375  (93.8%)
+I (xxxx) TINYML:   PREDICTION : powerbank  (93.8%)
+I (xxxx) TINYML:   TIMING     : pre=6.8ms  invoke=184.6ms  total=191.6ms
+```
+
+**184ms per frame. ~50 KB model. No SD card. No WiFi. No server.**
+
+The model correctly classifies guava and powerbank at >90% confidence on
+clean samples. It does not classify background brightness.
+
+---
+
+## Summary of All Bugs and Fixes
+
+| # | Bug | Symptom | Fix |
 |---|---|---|---|
-| 1 | `convert("L")` with `CHANNELS=3` | Images loaded as grayscale, model expected RGB | Changed to `convert("RGB")` |
-| 2 | Seeds set before `import tensorflow` | Non-reproducible runs | Moved seeds after all imports |
-| 3 | `class_weight=` silently dropped by tf.data | Model collapsed to majority class | Baked sample weights into dataset as 3rd tensor |
-| 4 | BatchNorm + weighted dataset inputs | loss=33 on epoch 1, then stuck at 0.693 | Removed BatchNorm, added `clipnorm=1.0` |
-| 5 | False collapse warning threshold | Warning fired at 72.7% accuracy | Added `len(np.unique(pred_classes))==1` condition |
-| 6 | `pred_classes` used before defined | `NameError` crash after training | Moved `model.predict()` before the warning check |
-| 7 | Mobile/powerbank colour-identical | Per-class accuracy flip-flops with any LR | Changed classes to guava/powerbank |
+| 1 | Phone vs powerbank too similar | Model predicts one class always | Changed classes to guava vs powerbank |
+| 2 | `class_weight` silently ignored with `.map()` | Imbalance not corrected | Removed class_weight; relied on visual difference |
+| 3 | BatchNorm + augmentation pipeline | Loss spikes to 30+ on epoch 1, model collapses | Removed BatchNorm, used L2 regularisation |
+| 4 | Background bias in training data | Ceiling = guava, dark desk = powerbank | Varied backgrounds in all training images |
+| 5 | OV3660 doesn't support `PIXFORMAT_RGB888` | `esp_camera_init` fails: ESP_FAIL | Capture YUV422, convert to RGB in firmware |
+| 6 | Firmware writing float32 into int8 tensor | Predicts by scene brightness | Write to `input->data.int8`; apply `uint8 - 128` not `/255` |
+| 7 | Calibration on wrong directory (4 classes) | int8 quantization params skewed | Calibrate on training file paths only |
+| 8 | `int32_t` passed to `%d` format specifier | Build fails: `-Werror=format` | Cast `dims->data[]` and `params.zero_point` to `(int)` |
+| 9 | Train/val split leaks orig/clean pairs | Optimistic val accuracy | Group-aware split on base filename key |
 
 ---
 
 ## Key Lessons
 
-**On tf.data and Keras:**
-`class_weight=` in `model.fit()` is silently ignored when the dataset has a
-`.map()` step. No error, no warning — it just doesn't apply. Always bake
-class weights into the dataset as a third `(image, label, weight)` tensor
-if you are using augmentation via `.map()`.
+**On data:**
+- Vary backgrounds in every training image. If both classes were filmed
+  against the same surface, the model learns the surface.
+- Group-aware splitting matters when the dataset contains multiple versions
+  of the same physical photo. All versions of one scene must stay in one split.
+- Perceptual hashing (phash) is the right tool for near-duplicate removal —
+  it catches compressed/slightly-varied re-captures of the same frame.
 
-**On BatchNormalization with weighted datasets:**
-BatchNorm initialises its running statistics on the first batch. If that
-batch comes from a weighted dataset, the statistics are skewed and activations
-can explode (loss = 30+). The model then collapses to 0.693 and never
-recovers. Fix: remove BatchNorm, or use Layer Normalization instead (which
-normalises per-sample rather than per-batch).
+**On training:**
+- `class_weight` does not work with `.map()` augmentation pipelines.
+- `layers.Rescaling(1/255)` inside the model is the correct pattern for
+  int8 quantization — the normalisation is encoded in the weights, so
+  raw uint8 values should be fed at inference, not pre-normalised floats.
+- Loss = 0.693 at epoch 1 is normal for binary cross-entropy. It only
+  indicates collapse if it does not decrease.
 
-**On loss = 0.693:**
-This is −ln(0.5) — the loss value when a model outputs exactly 50%
-probability for every class. It means the model has learned nothing and is
-guessing. However, loss near 0.693 alone is NOT sufficient to diagnose
-collapse — a model can have this loss briefly at the start of training while
-it's still learning. Genuine collapse requires BOTH loss≈0.693 AND the
-predicted distribution being all one class.
+**On hardware:**
+- The OV3660 only supports JPEG, YUV422, and GRAYSCALE. RGB888 is not
+  available through the esp32-camera driver for this sensor.
+- `int32_t` on the ESP32 toolchain is `long int`. Use `(int)` casts for
+  `%d` format arguments, or use `PRId32` macros.
+- Writing float32 bytes into an int8 tensor pointer produces confident but
+  wrong outputs — not a crash, not NaN, just garbage predictions. Always
+  check `input->type` at startup.
 
-**On class collapse:**
-A model collapses to predicting one class when the majority class provides
-a lower average loss than trying to learn both. Symptoms: overall accuracy
-≈ majority class fraction, predicted distribution = [N, 0] or [0, N].
-Fix: sample weights. But watch for the tf.data silent-drop bug above.
-
-**On per-class accuracy as the real metric:**
-Overall accuracy is misleading when classes are imbalanced or when collapse
-is happening. Always look at per-class accuracy. A 55% overall accuracy with
-[77, 0] predicted distribution is very different from 55% with [42, 35].
-
-**On background bias in training data:**
-If training images all use the same background (plain white wall), the model
-may learn to classify the background rather than the object. Always collect
-training data in varied environments that match real usage conditions.
-
-**On choosing object classes:**
-The most impactful decision in a small-dataset classification project is
-which classes to use. Choose objects that are visually distinct in:
-- Shape (round vs rectangular)
-- Colour (green vs grey)
-- Texture (rough vs smooth)
-Classes that differ only in subtle details (camera bump vs cable port on two
-dark rectangles) require much more data and a more powerful model.
-
-**On model size for ESP32:**
-- Scratch CNN (~1.2 MB quantized): fits in SPIFFS with default partition
-- MobileNetV2 (~3.5 MB quantized): requires custom SPIFFS partition or SD card
-- Rule of thumb: if the objects are visually distinct, use the scratch CNN.
-  Only reach for transfer learning when the objects are similar and you have
-  ruled out data/class selection issues first.
+**On architecture:**
+- Scratch CNN (~50 KB int8) at 184ms/frame beats MobileNetV2 (~3 MB) at
+  5700ms/frame for visually distinct two-class problems. Use the simplest
+  model that works.
+- Probe your hardware incrementally. Model-only probe first, then camera
+  coexistence probe, then full inference. Each probe catches one class of
+  bug at a time.
 
 ---
 
@@ -535,29 +570,34 @@ dark rectangles) require much more data and a more powerful model.
 
 | File | Purpose |
 |---|---|
-| `train_classifier.py` | Main training script |
-| `test_laptop.py` | Webcam test script — test model before flashing to ESP32 |
-| `best_model.keras` | Best weights saved during training (Keras format) |
-| `model.tflite` | Exported model ready for ESP32 deployment |
-| `model_data.h` | C header generated by `xxd -i model.tflite` |
-| `training_history.png` | Accuracy and loss curves saved after each run |
+| `sanitizer_dataset.py` | Hand removal (HSV + inpainting) + duplicate filtering (phash) |
+| `train_classifier_v3.py` | Training script — TinyML scratch CNN, int8, group-aware split |
+| `test_laptop.py` | Webcam validation script |
+| `model.keras` | Best training weights (Keras format) |
+| `model.tflite` | Deployed model — int8, ~50 KB |
+| `model_history.png` | Accuracy/loss curves from latest training run |
+| `firmware/main/model_data.h` | Declares `model_tflite[]` and `model_tflite_len` |
+| `firmware/main/model_data.cc` | Generated by `xxd` — contains model bytes |
+| `firmware/main/main_tinyml_probe.cc` | **Active firmware** — int8 inference loop |
+| `firmware/main/main_model_probe.cc` | Diagnostic: model load + AllocateTensors |
+| `firmware/main/main_camera_probe.cc` | Diagnostic: camera + model coexistence |
 
 ---
 
 ## Current Status
 
-- Classes: `guava` vs `powerbank`
-- Dataset: being collected (target: 100-150 images per class)
-- Model: scratch CNN, quantized, target size ~1.2 MB
-- Deployment plan: SPIFFS on ESP32-CAM (default partition fits 1.2 MB)
-- Next milestone: 90%+ val accuracy on guava/powerbank before flashing
+**Working end-to-end on hardware.**
+
+- Model: TinyML scratch CNN, int8, ~50 KB, embedded in firmware flash
+- Camera: OV3660, YUV422, converted to RGB (BT.601) in firmware
+- Inference: 184ms per frame
+- Accuracy: >90% confidence on guava and powerbank under normal conditions
+- No SD card, no WiFi, no server required
 
 ## Next Steps
 
-1. Collect 100-150 images per class with varied backgrounds and lighting
-2. Train: `python train_classifier.py --dataset . --quantize`
-3. Check size: should be ~1.2 MB
-4. Test on laptop: `python test_laptop.py`
-5. If accuracy is good: `xxd -i model.tflite > model_data.h`
-6. Flash to ESP32-CAM via SPIFFS uploader
-7. Wire up to rover motors once classification is reliable
+- [ ] Wire classification output to rover motor control
+- [ ] Collect more varied images (different lighting, different distances)
+- [ ] WiFi + MJPEG live view (memory headroom confirmed in Phase 9)
+- [ ] Per-class confidence threshold tuning
+- [ ] OTA model updates
