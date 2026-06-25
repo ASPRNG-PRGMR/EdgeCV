@@ -49,7 +49,7 @@ EdgeCV/
 │
 └── classifier/                     # Custom two-class object classifier
     ├── sanitizer_dataset.py        # Step 1 — hand removal + duplicate filtering
-    ├── train_classifier_v3.py      # Step 2 — training script (TinyML CNN, int8)
+    ├── train_classifier.py         # Step 2 — training script (TinyML CNN, int8)
     ├── test_laptop.py              # Step 3 — webcam validation before flashing
     ├── dataset/                    # Image dataset
     │   ├── guava/                  # Training images (sanitized)
@@ -127,8 +127,8 @@ Raw images (held by hand)
 sanitizer_dataset.py            removes hand (HSV mask + inpainting)
                                 removes duplicate frames (perceptual hash)
         │
-        ▼
-train_classifier_v3.py          trains TinyML scratch CNN
+
+train_classifier.py             trains TinyML scratch CNN
                                 exports int8 TFLite model
         │
         ▼
@@ -175,7 +175,7 @@ Place raw images in `dataset/test_guava/` and `dataset/test_powerbank/`. The san
 ### Step 2 — Training
 
 ```bash
-python train_classifier_v3.py
+python train_classifier.py
 ```
 
 Edit the paths at the top of the file before running. The script:
