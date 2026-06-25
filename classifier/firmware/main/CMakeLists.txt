@@ -1,21 +1,14 @@
-## CMakeLists.txt — classifier/firmware
+## main/CMakeLists.txt — classifier/firmware/main
 ##
-## This single project contains three entry points (main_*.cc), one for
-## each deployment stage documented in training_devlog.md Phase 9/10:
-##
-##   main_model_probe.cc   — Probe 1: model load + AllocateTensors only
-##   main_camera_probe.cc  — Probe 2: model + camera coexistence check
-##   main_inference.cc     — full pipeline (the deployed application)
-##
-## Only one is compiled per build. Select it with the APP_MAIN environment
-## variable before calling idf.py build. If unset, main_inference.cc is
-## used — so a plain `idf.py build flash monitor` always builds the real
-## deployed application.
+## Entry points (select with APP_MAIN env var before idf.py build):
+##   main_tinyml_probe.cc  — standalone inference, serial output only (DEFAULT)
+##   main_wifi_stream.cc   — inference + MJPEG live stream + browser UI
+##   main_model_probe.cc   — diagnostic: model load + AllocateTensors only
+##   main_camera_probe.cc  — diagnostic: camera + model coexistence check
 ##
 ## Examples:
-##   APP_MAIN=main_model_probe.cc  idf.py build flash monitor
-##   APP_MAIN=main_camera_probe.cc idf.py build flash monitor
-##   idf.py build flash monitor                # builds main_inference.cc
+##   idf.py build flash monitor                              # tinyml_probe
+##   APP_MAIN=main_wifi_stream.cc idf.py build flash monitor # wifi stream
 
 if(DEFINED ENV{APP_MAIN})
     set(EDGECV_APP_MAIN $ENV{APP_MAIN})
@@ -38,4 +31,9 @@ idf_component_register(
         heap
         spi_flash
         esp32-camera
+        esp_wifi
+        esp_event
+        esp_netif
+        esp_http_server
+        nvs_flash
 )
