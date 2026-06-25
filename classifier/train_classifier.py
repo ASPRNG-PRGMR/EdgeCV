@@ -1,5 +1,5 @@
 """
-train_classifier_v3.py
+train_classifier.py
 ======================
 EdgeCV — guava / powerbank TinyML classifier.
 
