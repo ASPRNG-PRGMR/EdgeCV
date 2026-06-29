@@ -3,3 +3,6 @@ best_model.keras
 debug_frame.jpg
 __pycache__/
 *.pyc
+classifier/firmware/build/
+classifier/firmware/main/build/
+

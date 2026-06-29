@@ -82,6 +82,7 @@
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp_jpeg/libespressif__esp_jpeg.a
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp32-camera/libespressif__esp32-camera.a
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/libespressif__mdns.a
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-nn/libespressif__esp-nn.a
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-tflite-micro/libespressif__esp-tflite-micro.a
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/main/libmain.a

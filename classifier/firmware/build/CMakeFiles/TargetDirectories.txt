@@ -819,6 +819,13 @@
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp32-camera/CMakeFiles/install.dir
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp32-camera/CMakeFiles/install/local.dir
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp32-camera/CMakeFiles/install/strip.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/__idf_espressif__mdns.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/edit_cache.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/rebuild_cache.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/list_install_components.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/install.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/install/local.dir
+/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/CMakeFiles/install/strip.dir
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-nn/CMakeFiles/__idf_espressif__esp-nn.dir
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-nn/CMakeFiles/edit_cache.dir
 /mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-nn/CMakeFiles/rebuild_cache.dir

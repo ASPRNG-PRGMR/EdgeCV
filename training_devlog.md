@@ -858,3 +858,219 @@ where flapping between states is mechanically harmful.
 - Low-latency requirement → `STABILITY_MAJORITY_VOTE` with small window
 - Continuous probabilistic stream → `STABILITY_EMA`
 
+
+---
+
+## Phase 16 — Raw TCP Stream + Serial Inference (main_stream_raw.cc)
+
+### Goal
+
+A lightweight alternative to `main_wifi_stream.cc`: stream camera frames
+to a laptop Python script for display, while running inference independently
+on the ESP32 and printing predictions to the serial monitor. No browser, no
+HTTP server, no MJPEG overhead.
+
+The laptop (`live_infer.py`) only receives and displays frames — it does
+no inference, has no TensorFlow dependency, and needs only `opencv-python`
+and `numpy`.
+
+### Architecture
+
+```
+ESP32 Core 1 — stream_task:
+  loop:
+    grab YUV422 frame
+    every INFER_EVERY_N_FRAMES:
+      yuv422_to_int8_tensor() -> Invoke() -> print to serial
+    frame2jpg() -> [4-byte LE length][JPEG bytes] -> TCP send
+
+Laptop — live_infer.py:
+  recv 4-byte length -> recv JPEG bytes -> cv2.imdecode -> cv2.imshow
+```
+
+**Why YUV422 capture (not JPEG):**
+Capturing JPEG directly from the OV3660 at 96×96 produces `cam_hal: NO-SOI`
+errors — the sensor's JPEG pipeline doesn't produce valid output at that
+resolution. YUV422 works reliably. `frame2jpg()` encodes the YUV frame to
+JPEG on-device for transmission, adding ~5ms per frame.
+
+**Why `frame2jpg()` and not native JPEG capture:**
+Native JPEG capture at larger resolutions works but the frame is then too
+large to decode on-device for inference without an extra JPEG decode step.
+YUV422 at 96×96 feeds directly into the BT.601 conversion that inference
+already uses, with no intermediate decode needed.
+
+### Bug — JPEG capture at 96×96 produces NO-SOI
+
+When the camera was configured for `PIXFORMAT_JPEG` at `FRAMESIZE_96X96`,
+every captured frame triggered `cam_hal: NO-SOI` — the JPEG start-of-image
+marker `0xFF 0xD8` was missing. The sensor outputs no valid JPEG data at
+that resolution.
+
+Attempted workaround: switch to `FRAMESIZE_QVGA` (320×240). The SO-I error
+persisted even at QVGA, compounded by the stream task consuming frames too
+slowly.
+
+**Root cause:** The OV3660 JPEG pipeline is unreliable at small resolutions
+and requires warm-up frames. Rather than fight the sensor in JPEG mode,
+the approach was changed to YUV422 capture + software JPEG encode via
+`frame2jpg()`, which is the same path that already works in `main_tinyml_probe.cc`.
+
+### Bug — FB-OVF on JPEG capture mode
+
+With `CAMERA_GRAB_LATEST` and `fb_count=2`, constant frame buffer overflows
+appeared while the stream task was busy encoding/sending. Fixed by changing
+to `CAMERA_GRAB_WHEN_EMPTY` (same fix applied earlier in Phase 14). This
+was not an issue in YUV422 mode since the stream task consumes frames fast
+enough.
+
+### Bug — mDNS component not found
+
+```
+HINT: The component mdns could not be found.
+```
+
+`mdns` is not built into ESP-IDF v5.3 by default — it was moved to the
+component manager. Fixed by running:
+
+```bash
+idf.py add-dependency "espressif/mdns"
+```
+
+This adds the entry to `idf_component.yml` and pulls the component on next
+build. The same fix was needed in a previous project (tinyguard-monitor).
+
+### Bug — mDNS resolution failing on Windows
+
+```
+socket.gaierror: [Errno 11001] getaddrinfo failed
+```
+
+`socket.getaddrinfo()` with explicit `AF_INET`/`SOCK_STREAM` flags bypasses
+the Windows mDNS resolver even when Bonjour is installed. Fixed by switching
+to `socket.gethostbyname()` in `live_infer.py`, which goes through the
+normal Windows name resolution stack that Bonjour hooks into.
+
+### Bug — `IPSTR`/`IP2STR` macro type mismatch
+
+```
+error: format '%d' expects int but argument has type 'int32_t'
+```
+
+`IP2STR()` expects a pointer to `esp_ip4_addr_t` (which has a `.addr` field),
+but `client_addr.sin_addr` is a POSIX `struct in_addr` (which has `.s_addr`).
+Fixed by replacing the `IPSTR`/`IP2STR` macro with `inet_ntoa()`:
+
+```cpp
+// Before (wrong type)
+ESP_LOGI(TAG, "Client from " IPSTR, IP2STR(&client_addr.sin_addr));
+
+// After (correct)
+ESP_LOGI(TAG, "Client from %s", inet_ntoa(client_addr.sin_addr));
+```
+
+### CMakeLists REQUIRES cleanup
+
+The `REQUIRES` list in `main/CMakeLists.txt` was overpopulated with
+components pulled from previous entry points. `esp_http_server` is not
+used by `main_stream_raw.cc` (it uses a raw TCP socket, not HTTP). `heap`
+and `spi_flash` are implicit transitive dependencies in ESP-IDF v5.3 and
+don't need explicit declaration. Cleaned up to only what's actually used:
+`esp_psram`, `esp_timer`, `esp_camera`, `esp_wifi`, `esp_event`,
+`esp_netif`, `nvs_flash`, `mdns`, `driver`, `log`.
+
+### Result
+
+- `main_stream_raw.cc` flashed and running
+- Live camera feed displayed in OpenCV window via `live_infer.py`
+- Inference predictions printing to serial every 3 frames:
+
+```
+I (xxxx) RAW_STREAM: --- Frame 3 ---
+I (xxxx) RAW_STREAM:   guava     : 0.0625  (6.2%)
+I (xxxx) RAW_STREAM:   powerbank : 0.9375  (93.8%)
+I (xxxx) RAW_STREAM:   PREDICTION : powerbank  (93.8%)
+I (xxxx) RAW_STREAM:   invoke    : 184.3 ms
+```
+
+---
+
+## Phase 17 — BUILD_MODE CMake Flag (replaces APP_MAIN env var)
+
+### Problem
+
+The original entry-point selection used an environment variable:
+
+```bash
+APP_MAIN=main_stream_raw.cc idf.py build flash monitor
+```
+
+This works on Linux/macOS but breaks silently in two ways:
+- On Windows (native cmd/PowerShell), env-var prefix syntax is not supported.
+  The build falls through to the default without any error or warning.
+- The env var is set per-shell and easy to forget — a stale terminal with
+  `APP_MAIN` set will silently build the wrong entry point.
+
+CMake cache variables (`-D`) are the standard idf.py mechanism for
+parameterised builds, are platform-independent, and are visible in the
+CMake log output on every build.
+
+### Change
+
+Replaced `APP_MAIN` env-var lookup with a `BUILD_MODE` CMake cache variable
+in `main/CMakeLists.txt`. Friendly mode names map to source files:
+
+| `BUILD_MODE` value | Source file compiled |
+|---|---|
+| `probe` (default) | `main_tinyml_probe.cc` |
+| `stream` | `main_stream_raw.cc` |
+| `wifi` | `main_wifi_stream.cc` |
+| `edgecv_v2` | `main_edgecv_v2.cc` |
+| `model_probe` | `main_model_probe.cc` |
+| `camera_probe` | `main_camera_probe.cc` |
+
+Raw filenames still work as values for forward-compatibility with any
+existing scripts. The legacy `APP_MAIN` env-var is still honoured as a
+fallback when `BUILD_MODE` is not set, so existing workflows are not broken.
+
+### Usage
+
+```bash
+# default — serial-only inference
+idf.py build flash monitor
+
+# TCP stream to laptop
+idf.py -DBUILD_MODE=stream build flash monitor
+
+# browser MJPEG stream
+idf.py -DBUILD_MODE=wifi build flash monitor
+```
+
+### Why not run both probe + stream simultaneously
+
+The entry points are separate `app_main()` implementations — each one owns
+the full execution context (camera init, model load, task creation). There
+is no safe way to run two of them in the same firmware image: they would
+both call `esp_camera_init()`, both allocate the tensor arena, and both
+fight over PSRAM. The flag selects one entry point per build, which is the
+correct architecture for embedded systems.
+
+### build.sh — wrapper script
+
+Typing `idf.py -DBUILD_MODE=stream -p /dev/ttyUSB0 build flash` then a
+separate `picocom` command every session is friction. Added `build.sh` to
+`classifier/firmware/` to wrap the full workflow in one command:
+
+```bash
+./build.sh [port_number] [mode]
+
+./build.sh              # probe, /dev/ttyUSB0
+./build.sh 1            # probe, /dev/ttyUSB1
+./build.sh 0 stream     # stream, /dev/ttyUSB0
+./build.sh 0 wifi       # wifi,   /dev/ttyUSB0
+```
+
+The script runs `idf.py build flash`, exits immediately if the build fails
+(so picocom never opens on a failed flash), then launches picocom with
+`--lower-rts --lower-dtr` automatically. Port argument is just the USB
+number — `0` expands to `/dev/ttyUSB0` inside the script.

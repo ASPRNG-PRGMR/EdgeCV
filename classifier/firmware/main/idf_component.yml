@@ -4,14 +4,15 @@
 ## pull in for all three builds, since they share this one component.
 
 dependencies:
-  idf: ">=5.3"
+  idf: '>=5.3'
 
   ## TFLite Micro — required by all three entry points
   ## Source: https://components.espressif.com/components/espressif/esp-tflite-micro
   espressif/esp-tflite-micro:
-    version: ">=1.3.0"
+    version: '>=1.3.0'
 
   ## OV2640/OV3660 camera driver — required by camera_probe and inference
   ## (unused but harmless for model_probe)
   espressif/esp32-camera:
-    version: ">=2.0.0"
+    version: '>=2.0.0'
+  espressif/mdns: '*'

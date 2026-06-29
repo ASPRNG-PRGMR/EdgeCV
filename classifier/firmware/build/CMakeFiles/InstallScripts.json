@@ -116,6 +116,7 @@
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/wifi_provisioning/cmake_install.cmake",
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp_jpeg/cmake_install.cmake",
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp32-camera/cmake_install.cmake",
+		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__mdns/cmake_install.cmake",
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-nn/cmake_install.cmake",
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/espressif__esp-tflite-micro/cmake_install.cmake",
 		"/mnt/c/Users/it/Documents/EdgeCV/classifier/firmware/build/esp-idf/main/cmake_install.cmake"
