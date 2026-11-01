@@ -55,6 +55,7 @@ INT8 INPUT ON ESP32:
 """
 
 import os
+import re
 import math
 import random
 import numpy as np
@@ -68,17 +69,37 @@ import matplotlib.pyplot as plt
 # Configuration
 # ---------------------------------------------------------------------------
 
-DATASET_DIR         = r"/mnt/c/Users/it/Documents/EdgeCV/classifier/dataset"
-MODEL_SAVE_PATH_KERAS  = r"/mnt/c/Users/it/Documents/EdgeCV/classifier/model.keras"
-MODEL_SAVE_PATH_TFLITE = r"/mnt/c/Users/it/Documents/EdgeCV/classifier/model.tflite"
-HISTORY_PLOT_PATH      = r"/mnt/c/Users/it/Documents/EdgeCV/classifier/model_history.png"
+# Paths are relative to this file, not hardcoded to one machine. They used to
+# be absolute WSL paths (/mnt/c/Users/it/...), which meant the script could not
+# run anywhere except the one laptop it was written on.
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+DATASET_DIR            = os.path.join(HERE, "dataset")
+MODEL_SAVE_PATH_KERAS  = os.path.join(HERE, "model.keras")
+MODEL_SAVE_PATH_TFLITE = os.path.join(HERE, "model.tflite")
+HISTORY_PLOT_PATH      = os.path.join(HERE, "model_history.png")
+
+# Dataset layout produced by prepare_dataset.py. The old layout trained on
+# guava/ + powerbank/ and "tested" on test_guava/ + test_powerbank/ — but the
+# sanitizer built the former FROM the latter, so the test set was the training
+# source. See prepare_dataset.py's header for the full explanation.
+TRAIN_DIR = os.path.join(DATASET_DIR, "train")
+TEST_DIR  = os.path.join(DATASET_DIR, "test")
 
 IMG_HEIGHT  = 96
 IMG_WIDTH   = 96
 BATCH_SIZE  = 16
 EPOCHS      = 60
-VAL_SPLIT   = 0.20    # fraction of UNIQUE source images held out for val
+VAL_SPLIT   = 0.20    # fraction of each class's TRAIN timeline held out for val
 RANDOM_SEED = 42
+
+# Validation is split on the capture timeline, not at random. The captures are
+# continuous video at 4 fps, so a random split puts frames 250 ms apart — which
+# are near-identical — on both sides of the boundary, and val accuracy then
+# measures memorisation. Set this False to fall back to the old random/group
+# split if you ever have genuinely independent images.
+TEMPORAL_VAL_SPLIT = True
+VAL_GUARD_SECONDS  = 2.0
 
 CLASS_NAMES = ["guava", "powerbank"]   # alphabetical, matches folder names
 
@@ -206,52 +227,144 @@ def paths_to_dataset(paths: list[str], labels: list[int],
     return ds.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
 
 
+_TS_RE = re.compile(r"_(\d+)\.(?:jpg|jpeg|png)$", re.IGNORECASE)
+
+
+def build_temporal_split(class_dir: str, val_fraction: float, guard_s: float):
+    """Hold out the TAIL of a class's capture timeline for validation.
+
+    Filenames carry a millisecond epoch (guava_1781092996904.jpg), so the
+    frames can be ordered in time. The last `val_fraction` of the timeline
+    becomes val, and a guard band of `guard_s` seconds at the seam is dropped
+    so the last train frame and the first val frame are not consecutive frames
+    of one continuous motion.
+
+    Falls back to the group split if the filenames carry no timestamps.
+    """
+    paths = _list_images(class_dir)
+    dated, undated = [], []
+    for p in paths:
+        m = _TS_RE.search(os.path.basename(p))
+        (dated if m else undated).append((int(m.group(1)), p) if m else p)
+
+    if not dated:
+        print(f"    no timestamped filenames in {class_dir} — "
+              f"falling back to the group split")
+        return build_group_split(class_dir, val_fraction, RANDOM_SEED)
+    if undated:
+        print(f"    {len(undated)} file(s) without a timestamp excluded from the "
+              f"temporal split")
+
+    dated.sort(key=lambda t: t[0])
+    t0, t1 = dated[0][0], dated[-1][0]
+    span = t1 - t0
+    if span <= 0:
+        return [p for _, p in dated], []
+
+    boundary = t1 - span * val_fraction
+    half_guard = guard_s * 1000.0 / 2.0
+    train = [p for ts, p in dated if ts <= boundary - half_guard]
+    val   = [p for ts, p in dated if ts >= boundary + half_guard]
+    return train, val
+
+
 def load_datasets():
     """
-    Loads train, val, and test datasets.
-    Train and val come from guava/ and powerbank/ with group-aware splitting.
-    Test comes from test_guava/ and test_powerbank/.
+    Loads train, val, and test datasets from the prepare_dataset.py layout.
+
+      dataset/train/<class>/   sanitised training frames  -> split into train+val
+      dataset/test/<class>/    raw held-out tail frames   -> test only
+
+    The test set is produced by prepare_dataset.py as a temporal tail of each
+    capture, with a guard band, and is never sanitised or trained on.
     """
+    if not os.path.isdir(TRAIN_DIR):
+        raise FileNotFoundError(
+            f"Expected {TRAIN_DIR} — not found.\n"
+            f"Run:  python prepare_dataset.py\n"
+            f"That script ingests the capture archives and builds a "
+            f"leakage-free train/test split."
+        )
+
     train_paths, train_labels = [], []
     val_paths,   val_labels   = [], []
 
+    split_fn = (lambda d: build_temporal_split(d, VAL_SPLIT, VAL_GUARD_SECONDS)) \
+               if TEMPORAL_VAL_SPLIT else \
+               (lambda d: build_group_split(d, VAL_SPLIT, RANDOM_SEED))
+
     for label_idx, class_name in enumerate(CLASS_NAMES):
-        class_dir = os.path.join(DATASET_DIR, class_name)
+        class_dir = os.path.join(TRAIN_DIR, class_name)
         if not os.path.isdir(class_dir):
             raise FileNotFoundError(
                 f"Expected class folder not found: {class_dir}\n"
-                f"Make sure the sanitizer has run and produced '{class_name}/' "
-                f"inside DATASET_DIR."
+                f"Run prepare_dataset.py to build it."
             )
 
-        tr_paths, vl_paths = build_group_split(class_dir, VAL_SPLIT, RANDOM_SEED)
+        tr_paths, vl_paths = split_fn(class_dir)
         train_paths  += tr_paths
         train_labels += [label_idx] * len(tr_paths)
         val_paths    += vl_paths
         val_labels   += [label_idx] * len(vl_paths)
 
         print(f"  {class_name}: {len(tr_paths)} train  |  {len(vl_paths)} val "
-              f"(from {len(tr_paths)+len(vl_paths)} total images)")
+              f"({'temporal' if TEMPORAL_VAL_SPLIT else 'group'} split)")
 
     train_ds = paths_to_dataset(train_paths, train_labels, shuffle=True)
     val_ds   = paths_to_dataset(val_paths,   val_labels,   shuffle=False)
 
-    # Test set — from separate test_guava/ test_powerbank/ folders
+    # Test set — dataset/test/<class>/, built by prepare_dataset.py
     test_paths, test_labels = [], []
     for label_idx, class_name in enumerate(CLASS_NAMES):
-        test_dir = os.path.join(DATASET_DIR, f"test_{class_name}")
+        test_dir = os.path.join(TEST_DIR, class_name)
         if not os.path.isdir(test_dir):
-            print(f"  WARNING: test folder not found: {test_dir}  — skipping test eval")
+            print(f"  WARNING: test folder not found: {test_dir} — skipping test eval")
             continue
         tp = _list_images(test_dir)
         test_paths  += tp
         test_labels += [label_idx] * len(tp)
-        print(f"  {class_name} test: {len(tp)} images")
+        print(f"  {class_name} test: {len(tp)} images (held-out tail, never sanitised)")
 
     test_ds = paths_to_dataset(test_paths, test_labels, shuffle=False) \
               if test_paths else None
 
     return train_ds, val_ds, test_ds, train_paths
+
+
+def write_provenance(model_tflite_path: str, train_paths: list[str]) -> None:
+    """Record which images fitted this model, next to the model file.
+
+    eval_model.py reads this to decide whether an evaluation is contaminated.
+    Without it there is no way to tell, after the fact, whether a test set was
+    actually held out — which is exactly the situation the committed
+    model.tflite is in.
+    """
+    import hashlib, json, datetime
+
+    def sha256_file(p):
+        h = hashlib.sha256()
+        with open(p, "rb") as f:
+            for chunk in iter(lambda: f.read(1 << 16), b""):
+                h.update(chunk)
+        return h.hexdigest()
+
+    manifest_path = os.path.join(DATASET_DIR, "manifest.json")
+    prov = {
+        "created_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "model_sha256": sha256_file(model_tflite_path),
+        "dataset_manifest_sha256":
+            sha256_file(manifest_path) if os.path.isfile(manifest_path) else None,
+        "class_names": CLASS_NAMES,
+        "n_train_images": len(train_paths),
+        # Basenames without extension; capture filenames are unique by timestamp.
+        "train_keys": sorted(
+            os.path.splitext(os.path.basename(p))[0] for p in train_paths
+        ),
+    }
+    out = model_tflite_path + ".provenance.json"
+    with open(out, "w") as f:
+        json.dump(prov, f, indent=2)
+    print(f"  Provenance   : {out}")
 
 # ---------------------------------------------------------------------------
 # Evaluation
@@ -330,12 +443,35 @@ def convert_to_tflite_int8(model: tf.keras.Model,
 
     size_kb = os.path.getsize(MODEL_SAVE_PATH_TFLITE) / 1024
     print(f"Saved: {MODEL_SAVE_PATH_TFLITE}  ({size_kb:.1f} KB)")
+
+    write_provenance(MODEL_SAVE_PATH_TFLITE, calibration_paths)
+
+    # Report the quantisation parameters the converter actually produced, read
+    # back from the exported file. This used to print a hardcoded
+    # "scale ≈ 0.003922 (1/255)" for the INPUT tensor, which is wrong: that is
+    # the OUTPUT scale. Because Rescaling(1/255) sits inside the graph, the
+    # input tensor is quantised with scale 1.0 and zero_point -128, i.e. the
+    # int8 input carries raw 0..255 pixel values offset by -128. The firmware's
+    # (uint8 - 128) is correct, but the printed figure was not, and the same
+    # wrong number is repeated in README.md's "Expected serial output" block.
     print()
-    print("ESP32 input pipeline (verify against printed tensor params):")
-    print("  scale      ≈ 0.003922  (1/255)")
-    print("  zero_point = -128")
-    print("  int8_val   = (int8_t)(uint8_pixel - 128)")
+    print("ESP32 input pipeline (read back from the exported model):")
+    interp = tf.lite.Interpreter(model_path=MODEL_SAVE_PATH_TFLITE)
+    interp.allocate_tensors()
+    i_det = interp.get_input_details()[0]
+    o_det = interp.get_output_details()[0]
+    i_scale, i_zp = i_det["quantization"]
+    o_scale, o_zp = o_det["quantization"]
+    print(f"  input  : dtype={np.dtype(i_det['dtype']).name}  "
+          f"scale={i_scale:.6f}  zero_point={i_zp}")
+    print(f"  output : dtype={np.dtype(o_det['dtype']).name}  "
+          f"scale={o_scale:.6f}  zero_point={o_zp}")
+    print(f"  int8_val = (int8_t)(uint8_pixel - {-i_zp})")
     print("  Do NOT divide by 255 in firmware — Rescaling is baked into weights.")
+    if i_zp != -128:
+        print(f"  WARNING: zero_point is {i_zp}, but the firmware hardcodes "
+              f"(uint8 - 128). Update the firmware or the model will see "
+              f"wrong values.")
 
 # ---------------------------------------------------------------------------
 # Main

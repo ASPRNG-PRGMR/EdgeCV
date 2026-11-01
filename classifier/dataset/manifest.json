@@ -1,0 +1,2156 @@
+{
+  "class_names": [
+    "guava",
+    "powerbank"
+  ],
+  "test_tail_fraction": 0.3,
+  "guard_seconds": 2.0,
+  "sanitized_train": false,
+  "classes": {
+    "guava": {
+      "n_raw": 155,
+      "n_sessions": 1,
+      "span_seconds": 38.5,
+      "n_train": 104,
+      "n_test": 43,
+      "n_dropped_guard": 8,
+      "train_files": [
+        {
+          "file": "train/guava/guava_1781092996904.jpg",
+          "source": "raw/guava/guava_1781092996904.jpg",
+          "timestamp_ms": 1781092996904,
+          "sanitized": false,
+          "sha256": "ea7c06a6a6e8106b26d05387128e1ed84b3ed595d839135824150ee74abd3658"
+        },
+        {
+          "file": "train/guava/guava_1781092997140.jpg",
+          "source": "raw/guava/guava_1781092997140.jpg",
+          "timestamp_ms": 1781092997140,
+          "sanitized": false,
+          "sha256": "ea7c06a6a6e8106b26d05387128e1ed84b3ed595d839135824150ee74abd3658"
+        },
+        {
+          "file": "train/guava/guava_1781092997391.jpg",
+          "source": "raw/guava/guava_1781092997391.jpg",
+          "timestamp_ms": 1781092997391,
+          "sanitized": false,
+          "sha256": "1cbe0897b47e98df09615217285e55f9688cedca08194214b8ed57788d26a42b"
+        },
+        {
+          "file": "train/guava/guava_1781092997650.jpg",
+          "source": "raw/guava/guava_1781092997650.jpg",
+          "timestamp_ms": 1781092997650,
+          "sanitized": false,
+          "sha256": "0774609cdaab738b1b83e6d3cf923288b948321f36886bc44d83f3400a269bbc"
+        },
+        {
+          "file": "train/guava/guava_1781092997891.jpg",
+          "source": "raw/guava/guava_1781092997891.jpg",
+          "timestamp_ms": 1781092997891,
+          "sanitized": false,
+          "sha256": "9743f6140736b75b57fe5eeb2244a2af969ef80e2b17b3101ae7dbd0b33329b2"
+        },
+        {
+          "file": "train/guava/guava_1781092998151.jpg",
+          "source": "raw/guava/guava_1781092998151.jpg",
+          "timestamp_ms": 1781092998151,
+          "sanitized": false,
+          "sha256": "b41a6ce33d03df0a436b6dc4b9a8ef7ba81598ef3da8691f03561b1c1b52c955"
+        },
+        {
+          "file": "train/guava/guava_1781092998405.jpg",
+          "source": "raw/guava/guava_1781092998405.jpg",
+          "timestamp_ms": 1781092998405,
+          "sanitized": false,
+          "sha256": "586b5f4ed7f7248f3d56e81f475220150ce294a7d4e856adf06f053334f7d368"
+        },
+        {
+          "file": "train/guava/guava_1781092998654.jpg",
+          "source": "raw/guava/guava_1781092998654.jpg",
+          "timestamp_ms": 1781092998654,
+          "sanitized": false,
+          "sha256": "8326c4743dd8b359932c1802e625f7dd904c8f2f4bbe4c63f0b1637999a1edc3"
+        },
+        {
+          "file": "train/guava/guava_1781092998903.jpg",
+          "source": "raw/guava/guava_1781092998903.jpg",
+          "timestamp_ms": 1781092998903,
+          "sanitized": false,
+          "sha256": "91ace82eae6407b7a22910b00e9cce44ff8efe9bd9187586ec94beb96a9b2ee2"
+        },
+        {
+          "file": "train/guava/guava_1781092999139.jpg",
+          "source": "raw/guava/guava_1781092999139.jpg",
+          "timestamp_ms": 1781092999139,
+          "sanitized": false,
+          "sha256": "939aac77b5b2038e04d4bd71d135d05dcc082df4f7015ef4368ae86093dc3576"
+        },
+        {
+          "file": "train/guava/guava_1781092999391.jpg",
+          "source": "raw/guava/guava_1781092999391.jpg",
+          "timestamp_ms": 1781092999391,
+          "sanitized": false,
+          "sha256": "7c64817a55464f2417a34d1ceb94aa2efcdf62c44c144639befb6ecc01a43261"
+        },
+        {
+          "file": "train/guava/guava_1781092999639.jpg",
+          "source": "raw/guava/guava_1781092999639.jpg",
+          "timestamp_ms": 1781092999639,
+          "sanitized": false,
+          "sha256": "7c87d0343a9df7e95d20bf8306049291d73c118975beb1acb96bdfbfe342dc7e"
+        },
+        {
+          "file": "train/guava/guava_1781092999904.jpg",
+          "source": "raw/guava/guava_1781092999904.jpg",
+          "timestamp_ms": 1781092999904,
+          "sanitized": false,
+          "sha256": "ba45e47b8cc9fa9808123ccd639ed78eb4614f41b41b2940864a97ebe19d0038"
+        },
+        {
+          "file": "train/guava/guava_1781093000140.jpg",
+          "source": "raw/guava/guava_1781093000140.jpg",
+          "timestamp_ms": 1781093000140,
+          "sanitized": false,
+          "sha256": "de5bc9885f35a7007501c97b0c53bf0f126f2674a889c0adfb4b4a90b74bebce"
+        },
+        {
+          "file": "train/guava/guava_1781093000389.jpg",
+          "source": "raw/guava/guava_1781093000389.jpg",
+          "timestamp_ms": 1781093000389,
+          "sanitized": false,
+          "sha256": "69aab5fb48e5b09fca5eec85affd19c9c6e3ef57c8027fc2b5bc2826fd425403"
+        },
+        {
+          "file": "train/guava/guava_1781093000642.jpg",
+          "source": "raw/guava/guava_1781093000642.jpg",
+          "timestamp_ms": 1781093000642,
+          "sanitized": false,
+          "sha256": "643e2b34806e724e616810de407a6dac126061f21fe011abf7607444014f4579"
+        },
+        {
+          "file": "train/guava/guava_1781093000894.jpg",
+          "source": "raw/guava/guava_1781093000894.jpg",
+          "timestamp_ms": 1781093000894,
+          "sanitized": false,
+          "sha256": "b3b18a2258227cc3ce19c3ad9c1ed98197ad023235fc7455aa23723dfe815148"
+        },
+        {
+          "file": "train/guava/guava_1781093001143.jpg",
+          "source": "raw/guava/guava_1781093001143.jpg",
+          "timestamp_ms": 1781093001143,
+          "sanitized": false,
+          "sha256": "1d3cbca720edc7d76d3399e323d429906a950d0553870d9bb98f6374081c4a26"
+        },
+        {
+          "file": "train/guava/guava_1781093001389.jpg",
+          "source": "raw/guava/guava_1781093001389.jpg",
+          "timestamp_ms": 1781093001389,
+          "sanitized": false,
+          "sha256": "fbf8c99ed1bdd3273eb8685d36dd372fed18088b282a03db25a4a3c6dd6daefa"
+        },
+        {
+          "file": "train/guava/guava_1781093001643.jpg",
+          "source": "raw/guava/guava_1781093001643.jpg",
+          "timestamp_ms": 1781093001643,
+          "sanitized": false,
+          "sha256": "e63fa22be749bc3fc57c460eaab7c5af6ccb86bf215271915ca0871e5a8fe64c"
+        },
+        {
+          "file": "train/guava/guava_1781093001896.jpg",
+          "source": "raw/guava/guava_1781093001896.jpg",
+          "timestamp_ms": 1781093001896,
+          "sanitized": false,
+          "sha256": "5399176b94a59a39006a394dd8e06742f45743f0554d09de8e6c3e004757a1d6"
+        },
+        {
+          "file": "train/guava/guava_1781093002146.jpg",
+          "source": "raw/guava/guava_1781093002146.jpg",
+          "timestamp_ms": 1781093002146,
+          "sanitized": false,
+          "sha256": "9ad3d65fd6ea4ef31d48ee33280a3c034eab38fc3222e88defc517674a4b0193"
+        },
+        {
+          "file": "train/guava/guava_1781093002390.jpg",
+          "source": "raw/guava/guava_1781093002390.jpg",
+          "timestamp_ms": 1781093002390,
+          "sanitized": false,
+          "sha256": "3add3b11b1027c57b887d189ebcf7aa49f018d18e66fc0eb0ac95c1798d8d4be"
+        },
+        {
+          "file": "train/guava/guava_1781093002641.jpg",
+          "source": "raw/guava/guava_1781093002641.jpg",
+          "timestamp_ms": 1781093002641,
+          "sanitized": false,
+          "sha256": "b2d79d518439c12325407eb52cca1db16def3b628b83d097c17f61e524731f70"
+        },
+        {
+          "file": "train/guava/guava_1781093002901.jpg",
+          "source": "raw/guava/guava_1781093002901.jpg",
+          "timestamp_ms": 1781093002901,
+          "sanitized": false,
+          "sha256": "6ebfee2fb979c6c2a47562636e0bef8edb30a2f52dd24cf970d16f08e46f3d66"
+        },
+        {
+          "file": "train/guava/guava_1781093003152.jpg",
+          "source": "raw/guava/guava_1781093003152.jpg",
+          "timestamp_ms": 1781093003152,
+          "sanitized": false,
+          "sha256": "7066eaab43c03d4af0d603e43478db6b5ca5581a32abe3ea3128aca1c7017056"
+        },
+        {
+          "file": "train/guava/guava_1781093003403.jpg",
+          "source": "raw/guava/guava_1781093003403.jpg",
+          "timestamp_ms": 1781093003403,
+          "sanitized": false,
+          "sha256": "97520ed16d9389689cd3706ab36474fc9b24067230dde087b248952aaf366bf2"
+        },
+        {
+          "file": "train/guava/guava_1781093003653.jpg",
+          "source": "raw/guava/guava_1781093003653.jpg",
+          "timestamp_ms": 1781093003653,
+          "sanitized": false,
+          "sha256": "3390213ac2dc191da759c61e660ffe8ebd6c6afe5ae712602130471885d510c3"
+        },
+        {
+          "file": "train/guava/guava_1781093003889.jpg",
+          "source": "raw/guava/guava_1781093003889.jpg",
+          "timestamp_ms": 1781093003889,
+          "sanitized": false,
+          "sha256": "cc265dc3538a037f76f422fd3a975a2a5bf8b86a64b183e3061b1e6d23a0f44f"
+        },
+        {
+          "file": "train/guava/guava_1781093004141.jpg",
+          "source": "raw/guava/guava_1781093004141.jpg",
+          "timestamp_ms": 1781093004141,
+          "sanitized": false,
+          "sha256": "131c271737a15f9ee0ddd31b2058edfbf296723393061135f2987be8a8d55c1a"
+        },
+        {
+          "file": "train/guava/guava_1781093004392.jpg",
+          "source": "raw/guava/guava_1781093004392.jpg",
+          "timestamp_ms": 1781093004392,
+          "sanitized": false,
+          "sha256": "d6033b5e33921b95526685a1b942ff791809ddf1924332a7a0c0fbe0f60fd69d"
+        },
+        {
+          "file": "train/guava/guava_1781093004642.jpg",
+          "source": "raw/guava/guava_1781093004642.jpg",
+          "timestamp_ms": 1781093004642,
+          "sanitized": false,
+          "sha256": "ead01c72fd728902d63d1bf1d72bf5d2ff7459e96204717511f6720051b1fdfd"
+        },
+        {
+          "file": "train/guava/guava_1781093004889.jpg",
+          "source": "raw/guava/guava_1781093004889.jpg",
+          "timestamp_ms": 1781093004889,
+          "sanitized": false,
+          "sha256": "1d6651a8e49b17c60f1ebb100ae233241a894af4c9378090ebf0f4b11d22f1d7"
+        },
+        {
+          "file": "train/guava/guava_1781093005142.jpg",
+          "source": "raw/guava/guava_1781093005142.jpg",
+          "timestamp_ms": 1781093005142,
+          "sanitized": false,
+          "sha256": "ce91ae689b8bfd758385c177b50f8b1572fdde62dafef7130a5741099555f342"
+        },
+        {
+          "file": "train/guava/guava_1781093005394.jpg",
+          "source": "raw/guava/guava_1781093005394.jpg",
+          "timestamp_ms": 1781093005394,
+          "sanitized": false,
+          "sha256": "ee3a82c1d003159ad9054d1979c76f08938ef1f3182507f7422d0e1770898255"
+        },
+        {
+          "file": "train/guava/guava_1781093005645.jpg",
+          "source": "raw/guava/guava_1781093005645.jpg",
+          "timestamp_ms": 1781093005645,
+          "sanitized": false,
+          "sha256": "a5dca701e75a9d5b480376feafe2a3e7db9a971d2c3912da6dc0344d0a48de9f"
+        },
+        {
+          "file": "train/guava/guava_1781093005897.jpg",
+          "source": "raw/guava/guava_1781093005897.jpg",
+          "timestamp_ms": 1781093005897,
+          "sanitized": false,
+          "sha256": "68c1906a7c9e548e1df7d5e5852e825b75bdd0e55633be2dd233955f041cbf77"
+        },
+        {
+          "file": "train/guava/guava_1781093006149.jpg",
+          "source": "raw/guava/guava_1781093006149.jpg",
+          "timestamp_ms": 1781093006149,
+          "sanitized": false,
+          "sha256": "2946d17d2b964eb081e792cc0049cc817a06ec33ef83db97c25d859032dec906"
+        },
+        {
+          "file": "train/guava/guava_1781093006398.jpg",
+          "source": "raw/guava/guava_1781093006398.jpg",
+          "timestamp_ms": 1781093006398,
+          "sanitized": false,
+          "sha256": "06cad1d2fbed517e668e83531b5e27595f65309570072222dc4e65a8266a0b40"
+        },
+        {
+          "file": "train/guava/guava_1781093006652.jpg",
+          "source": "raw/guava/guava_1781093006652.jpg",
+          "timestamp_ms": 1781093006652,
+          "sanitized": false,
+          "sha256": "5b51e8b3053a2dedec7b51db62884b12bb8d673265acb40259e22730a0a4070b"
+        },
+        {
+          "file": "train/guava/guava_1781093006892.jpg",
+          "source": "raw/guava/guava_1781093006892.jpg",
+          "timestamp_ms": 1781093006892,
+          "sanitized": false,
+          "sha256": "f258a8c32595ab8c4b0fc387edc4d26fc84118d21f947ff92b65bc9c3ed08cf2"
+        },
+        {
+          "file": "train/guava/guava_1781093007142.jpg",
+          "source": "raw/guava/guava_1781093007142.jpg",
+          "timestamp_ms": 1781093007142,
+          "sanitized": false,
+          "sha256": "fa4469c2611313091d77b255890c08838951d85bef1ec779f7bd2cf59fce3750"
+        },
+        {
+          "file": "train/guava/guava_1781093007403.jpg",
+          "source": "raw/guava/guava_1781093007403.jpg",
+          "timestamp_ms": 1781093007403,
+          "sanitized": false,
+          "sha256": "cb2c2767e5caac96dbc81bfe458a84bdbc28b3b738ec915ad5030ca7f26a3ce9"
+        },
+        {
+          "file": "train/guava/guava_1781093007654.jpg",
+          "source": "raw/guava/guava_1781093007654.jpg",
+          "timestamp_ms": 1781093007654,
+          "sanitized": false,
+          "sha256": "a4598c76cffbb42d74cb96ffc0940ecb4196bcefa9eef8e38637c6f649ea350d"
+        },
+        {
+          "file": "train/guava/guava_1781093007890.jpg",
+          "source": "raw/guava/guava_1781093007890.jpg",
+          "timestamp_ms": 1781093007890,
+          "sanitized": false,
+          "sha256": "74fcfb5d8e99c70a35f84cd2ff6a7f10deed3a0056212196a6bf9da4fad21f6f"
+        },
+        {
+          "file": "train/guava/guava_1781093008143.jpg",
+          "source": "raw/guava/guava_1781093008143.jpg",
+          "timestamp_ms": 1781093008143,
+          "sanitized": false,
+          "sha256": "b72675b959c8ae0f3f5cb764db2a39ddd568478e0111059e8eb7cec0d97ed5ff"
+        },
+        {
+          "file": "train/guava/guava_1781093008404.jpg",
+          "source": "raw/guava/guava_1781093008404.jpg",
+          "timestamp_ms": 1781093008404,
+          "sanitized": false,
+          "sha256": "3039421991d0f1a881e66f2df26f9c5d9dc6b613536e057995760ec0fc0da5f4"
+        },
+        {
+          "file": "train/guava/guava_1781093008653.jpg",
+          "source": "raw/guava/guava_1781093008653.jpg",
+          "timestamp_ms": 1781093008653,
+          "sanitized": false,
+          "sha256": "cd1c5a838a57d7df87b7afe8365f440de78dfa90483e8f278a5867b6c9814dd8"
+        },
+        {
+          "file": "train/guava/guava_1781093008903.jpg",
+          "source": "raw/guava/guava_1781093008903.jpg",
+          "timestamp_ms": 1781093008903,
+          "sanitized": false,
+          "sha256": "cd1c5a838a57d7df87b7afe8365f440de78dfa90483e8f278a5867b6c9814dd8"
+        },
+        {
+          "file": "train/guava/guava_1781093009154.jpg",
+          "source": "raw/guava/guava_1781093009154.jpg",
+          "timestamp_ms": 1781093009154,
+          "sanitized": false,
+          "sha256": "bf769f0c533d2aef4deb1a729f8789d1b77941dd74c1b7e87d2db71172ee86e1"
+        },
+        {
+          "file": "train/guava/guava_1781093009404.jpg",
+          "source": "raw/guava/guava_1781093009404.jpg",
+          "timestamp_ms": 1781093009404,
+          "sanitized": false,
+          "sha256": "71e01501ba4b62193f3fc805672a2c39f5dcd294d0681931897742757f6ab4d9"
+        },
+        {
+          "file": "train/guava/guava_1781093009649.jpg",
+          "source": "raw/guava/guava_1781093009649.jpg",
+          "timestamp_ms": 1781093009649,
+          "sanitized": false,
+          "sha256": "69762b8cd665647a488fbce1b225d2f3f81d8039f67466c1d4dcbe6db33bda2e"
+        },
+        {
+          "file": "train/guava/guava_1781093009904.jpg",
+          "source": "raw/guava/guava_1781093009904.jpg",
+          "timestamp_ms": 1781093009904,
+          "sanitized": false,
+          "sha256": "10f7053cd69287d62ab1c3a4692e32d613ad5e78a3db254ac4d1e3db8acea759"
+        },
+        {
+          "file": "train/guava/guava_1781093010139.jpg",
+          "source": "raw/guava/guava_1781093010139.jpg",
+          "timestamp_ms": 1781093010139,
+          "sanitized": false,
+          "sha256": "6177b09c28297f829fa090cd1ea1f73c1a32ee385cd9662201fe16a74b17bd4f"
+        },
+        {
+          "file": "train/guava/guava_1781093010398.jpg",
+          "source": "raw/guava/guava_1781093010398.jpg",
+          "timestamp_ms": 1781093010398,
+          "sanitized": false,
+          "sha256": "dfb11051ad14795eafb76ac07ce56c5abb9c3aba2ea862f40dab8a41b09b489f"
+        },
+        {
+          "file": "train/guava/guava_1781093010653.jpg",
+          "source": "raw/guava/guava_1781093010653.jpg",
+          "timestamp_ms": 1781093010653,
+          "sanitized": false,
+          "sha256": "35eba83e1e483d7f9c44b8519bc8599d9946c440368f34bab02ada26e41fbc18"
+        },
+        {
+          "file": "train/guava/guava_1781093010890.jpg",
+          "source": "raw/guava/guava_1781093010890.jpg",
+          "timestamp_ms": 1781093010890,
+          "sanitized": false,
+          "sha256": "74a56fe6b5dcfa3d17fba01cdb24a6e6a7839b33ed77dcbc7e239d2571aad386"
+        },
+        {
+          "file": "train/guava/guava_1781093011154.jpg",
+          "source": "raw/guava/guava_1781093011154.jpg",
+          "timestamp_ms": 1781093011154,
+          "sanitized": false,
+          "sha256": "a311edf75607cbfdbd6cbd800dc61fa680693a70a9181530980dffa2041ad979"
+        },
+        {
+          "file": "train/guava/guava_1781093011404.jpg",
+          "source": "raw/guava/guava_1781093011404.jpg",
+          "timestamp_ms": 1781093011404,
+          "sanitized": false,
+          "sha256": "588cb812be523b5c0b5a27a417d3b9b60835026cea9d1dfe6229dfebab85fcce"
+        },
+        {
+          "file": "train/guava/guava_1781093011639.jpg",
+          "source": "raw/guava/guava_1781093011639.jpg",
+          "timestamp_ms": 1781093011639,
+          "sanitized": false,
+          "sha256": "04468e6c22e9abe9ced20a6fe93c42d7bb555a6278a0db58d3ce1ad873b39bbe"
+        },
+        {
+          "file": "train/guava/guava_1781093011903.jpg",
+          "source": "raw/guava/guava_1781093011903.jpg",
+          "timestamp_ms": 1781093011903,
+          "sanitized": false,
+          "sha256": "cebbca1fe618094d1bd17599be0089d4c03999ed9aabeb6d0c745629560c099d"
+        },
+        {
+          "file": "train/guava/guava_1781093012151.jpg",
+          "source": "raw/guava/guava_1781093012151.jpg",
+          "timestamp_ms": 1781093012151,
+          "sanitized": false,
+          "sha256": "55123a7f757aca85fd35e8b3a1b609ac3cad8c6026f7adcd4d5ccebabab65480"
+        },
+        {
+          "file": "train/guava/guava_1781093012402.jpg",
+          "source": "raw/guava/guava_1781093012402.jpg",
+          "timestamp_ms": 1781093012402,
+          "sanitized": false,
+          "sha256": "d13b50c5b0a83054ecd25d7854b35f53b9cb24297130b01964d78ae6d4242546"
+        },
+        {
+          "file": "train/guava/guava_1781093012640.jpg",
+          "source": "raw/guava/guava_1781093012640.jpg",
+          "timestamp_ms": 1781093012640,
+          "sanitized": false,
+          "sha256": "9ff6ffdf7621de045852ff0fe2853670047f05332951b133409fa15e84a2d3c3"
+        },
+        {
+          "file": "train/guava/guava_1781093012900.jpg",
+          "source": "raw/guava/guava_1781093012900.jpg",
+          "timestamp_ms": 1781093012900,
+          "sanitized": false,
+          "sha256": "39a09c11cbc0466fe4d216e3753dcef9fc3122b18d35effdf1d18700367200f4"
+        },
+        {
+          "file": "train/guava/guava_1781093013151.jpg",
+          "source": "raw/guava/guava_1781093013151.jpg",
+          "timestamp_ms": 1781093013151,
+          "sanitized": false,
+          "sha256": "f661c7a7dd262f0514be9b867fbf1777677d8ce93d98ec88b9a988cea53a6322"
+        },
+        {
+          "file": "train/guava/guava_1781093013389.jpg",
+          "source": "raw/guava/guava_1781093013389.jpg",
+          "timestamp_ms": 1781093013389,
+          "sanitized": false,
+          "sha256": "f1cf73fd4de7357c6538caeed35ff145fd5e77cecff9be14c484ce582104d92e"
+        },
+        {
+          "file": "train/guava/guava_1781093013653.jpg",
+          "source": "raw/guava/guava_1781093013653.jpg",
+          "timestamp_ms": 1781093013653,
+          "sanitized": false,
+          "sha256": "a43d95ad8241ff8a896a72726b9e65e68d48998fd9cdb834d2e270aa3a62370f"
+        },
+        {
+          "file": "train/guava/guava_1781093013889.jpg",
+          "source": "raw/guava/guava_1781093013889.jpg",
+          "timestamp_ms": 1781093013889,
+          "sanitized": false,
+          "sha256": "2312dd5e376b073ffcbc7b05d6e6254d6ed8ea101c0bd028730f3b5083afd0a3"
+        },
+        {
+          "file": "train/guava/guava_1781093014141.jpg",
+          "source": "raw/guava/guava_1781093014141.jpg",
+          "timestamp_ms": 1781093014141,
+          "sanitized": false,
+          "sha256": "f925a84c863c1e3e153ec2f85804369a0f2e5bd9a6d6492e91eb49cabc870df8"
+        },
+        {
+          "file": "train/guava/guava_1781093014390.jpg",
+          "source": "raw/guava/guava_1781093014390.jpg",
+          "timestamp_ms": 1781093014390,
+          "sanitized": false,
+          "sha256": "0c60e156a3321722f5abca55f988acb3200cd3768bc26ce8e4981f07821f8b2d"
+        },
+        {
+          "file": "train/guava/guava_1781093014642.jpg",
+          "source": "raw/guava/guava_1781093014642.jpg",
+          "timestamp_ms": 1781093014642,
+          "sanitized": false,
+          "sha256": "c48b4dec8cc306ab084ffc8bb72622517fca7d0e6cfb5e02f28d493194115750"
+        },
+        {
+          "file": "train/guava/guava_1781093014892.jpg",
+          "source": "raw/guava/guava_1781093014892.jpg",
+          "timestamp_ms": 1781093014892,
+          "sanitized": false,
+          "sha256": "d6b8d5e82140a3eb992cb139a15028adb5f397d998c0a04ac758d69d9b6107dc"
+        },
+        {
+          "file": "train/guava/guava_1781093015144.jpg",
+          "source": "raw/guava/guava_1781093015144.jpg",
+          "timestamp_ms": 1781093015144,
+          "sanitized": false,
+          "sha256": "a79e1517726919c47237d36684b3c26f7708c05eba15cf87923bd6389bb65f89"
+        },
+        {
+          "file": "train/guava/guava_1781093015391.jpg",
+          "source": "raw/guava/guava_1781093015391.jpg",
+          "timestamp_ms": 1781093015391,
+          "sanitized": false,
+          "sha256": "08ae4e15479585a6cf2a159492f8561ae7aa7df0a8161750c4ace59cd2b84475"
+        },
+        {
+          "file": "train/guava/guava_1781093015642.jpg",
+          "source": "raw/guava/guava_1781093015642.jpg",
+          "timestamp_ms": 1781093015642,
+          "sanitized": false,
+          "sha256": "fe8d15cd1579b41db0235dcede6382fa41d8764df96a07f25a920abbe7879197"
+        },
+        {
+          "file": "train/guava/guava_1781093015892.jpg",
+          "source": "raw/guava/guava_1781093015892.jpg",
+          "timestamp_ms": 1781093015892,
+          "sanitized": false,
+          "sha256": "c571cbcddfb552a332ecfcfd27c69033164e6fabb2d7efca87231dd6389d4d8f"
+        },
+        {
+          "file": "train/guava/guava_1781093016143.jpg",
+          "source": "raw/guava/guava_1781093016143.jpg",
+          "timestamp_ms": 1781093016143,
+          "sanitized": false,
+          "sha256": "53b1747562704365b60991880cf6e14a6ad3e99b6aec3cc9e612fa9d357d6d57"
+        },
+        {
+          "file": "train/guava/guava_1781093016395.jpg",
+          "source": "raw/guava/guava_1781093016395.jpg",
+          "timestamp_ms": 1781093016395,
+          "sanitized": false,
+          "sha256": "3fbd8db1ef7c65801ea53f6998ac24f3db7349d74c75933f605fd4e302f6915c"
+        },
+        {
+          "file": "train/guava/guava_1781093016644.jpg",
+          "source": "raw/guava/guava_1781093016644.jpg",
+          "timestamp_ms": 1781093016644,
+          "sanitized": false,
+          "sha256": "68f399b6b5f66ebc62a86d203ae25a446b0698bffeded6b002550b14acadafdc"
+        },
+        {
+          "file": "train/guava/guava_1781093016893.jpg",
+          "source": "raw/guava/guava_1781093016893.jpg",
+          "timestamp_ms": 1781093016893,
+          "sanitized": false,
+          "sha256": "95c7baba0ab0c4ecff89e2966c9ca51791cd3b815493f308f8e8d155825d9a3c"
+        },
+        {
+          "file": "train/guava/guava_1781093017142.jpg",
+          "source": "raw/guava/guava_1781093017142.jpg",
+          "timestamp_ms": 1781093017142,
+          "sanitized": false,
+          "sha256": "95c7baba0ab0c4ecff89e2966c9ca51791cd3b815493f308f8e8d155825d9a3c"
+        },
+        {
+          "file": "train/guava/guava_1781093017393.jpg",
+          "source": "raw/guava/guava_1781093017393.jpg",
+          "timestamp_ms": 1781093017393,
+          "sanitized": false,
+          "sha256": "016a24e2e78a3acd81459923ef33a0e798f8890e94508cde5acff984d19593a9"
+        },
+        {
+          "file": "train/guava/guava_1781093017642.jpg",
+          "source": "raw/guava/guava_1781093017642.jpg",
+          "timestamp_ms": 1781093017642,
+          "sanitized": false,
+          "sha256": "28fe7dbbfcd0b6eea03a59abb382372395d8e6a6f33e48f456edacaffcce8b14"
+        },
+        {
+          "file": "train/guava/guava_1781093017891.jpg",
+          "source": "raw/guava/guava_1781093017891.jpg",
+          "timestamp_ms": 1781093017891,
+          "sanitized": false,
+          "sha256": "ec83f27e5f818789adb71871daa774233a37d199395d10e030d0e0f689b550e5"
+        },
+        {
+          "file": "train/guava/guava_1781093018142.jpg",
+          "source": "raw/guava/guava_1781093018142.jpg",
+          "timestamp_ms": 1781093018142,
+          "sanitized": false,
+          "sha256": "f3501179542c7c05f70a5a3468f303f5afc9c1a4644388a7bd635bd44d2bcbc1"
+        },
+        {
+          "file": "train/guava/guava_1781093018391.jpg",
+          "source": "raw/guava/guava_1781093018391.jpg",
+          "timestamp_ms": 1781093018391,
+          "sanitized": false,
+          "sha256": "d183b371f9ed58a96ea69800e37c7cf1a1ebad20d70bdd4a4cbcd82545e886a1"
+        },
+        {
+          "file": "train/guava/guava_1781093018641.jpg",
+          "source": "raw/guava/guava_1781093018641.jpg",
+          "timestamp_ms": 1781093018641,
+          "sanitized": false,
+          "sha256": "47eec5b8843afae029fa2804b1de080c41173a962a56b011a3f481de91953ee3"
+        },
+        {
+          "file": "train/guava/guava_1781093018890.jpg",
+          "source": "raw/guava/guava_1781093018890.jpg",
+          "timestamp_ms": 1781093018890,
+          "sanitized": false,
+          "sha256": "7b30cac3e080ca01f5caa269b2796f4a31d3522ea559834a54ff37acff8479f9"
+        },
+        {
+          "file": "train/guava/guava_1781093019142.jpg",
+          "source": "raw/guava/guava_1781093019142.jpg",
+          "timestamp_ms": 1781093019142,
+          "sanitized": false,
+          "sha256": "8d9d13aeff31579f96ebb2979e315e8720117202cfcbc132671f503573c2af05"
+        },
+        {
+          "file": "train/guava/guava_1781093019392.jpg",
+          "source": "raw/guava/guava_1781093019392.jpg",
+          "timestamp_ms": 1781093019392,
+          "sanitized": false,
+          "sha256": "24e20f9fefec7c9c52da67edc1040023ee2341e13c881296e141ddd84805b2ff"
+        },
+        {
+          "file": "train/guava/guava_1781093019643.jpg",
+          "source": "raw/guava/guava_1781093019643.jpg",
+          "timestamp_ms": 1781093019643,
+          "sanitized": false,
+          "sha256": "bb8b438a4a84ff4c4b708ed65e0c369a229e83f85873667cf9da2f98d963841f"
+        },
+        {
+          "file": "train/guava/guava_1781093019893.jpg",
+          "source": "raw/guava/guava_1781093019893.jpg",
+          "timestamp_ms": 1781093019893,
+          "sanitized": false,
+          "sha256": "de6665c31dcc20b67f1bed56b6c95bb48765be84750ce17c78ef0cbff84ec2ff"
+        },
+        {
+          "file": "train/guava/guava_1781093020142.jpg",
+          "source": "raw/guava/guava_1781093020142.jpg",
+          "timestamp_ms": 1781093020142,
+          "sanitized": false,
+          "sha256": "65ff0155113ba8fa7170d5a3ec8d30fd9ec1dabd27d60685468352609f808f49"
+        },
+        {
+          "file": "train/guava/guava_1781093020391.jpg",
+          "source": "raw/guava/guava_1781093020391.jpg",
+          "timestamp_ms": 1781093020391,
+          "sanitized": false,
+          "sha256": "7f67609a9304491ca062ce6bcc81760d94480128131d787e9170a171a57893cf"
+        },
+        {
+          "file": "train/guava/guava_1781093020641.jpg",
+          "source": "raw/guava/guava_1781093020641.jpg",
+          "timestamp_ms": 1781093020641,
+          "sanitized": false,
+          "sha256": "1dda091d7e9b87f60198c13da425f956caee9a85b403c43998828bde174a9671"
+        },
+        {
+          "file": "train/guava/guava_1781093020890.jpg",
+          "source": "raw/guava/guava_1781093020890.jpg",
+          "timestamp_ms": 1781093020890,
+          "sanitized": false,
+          "sha256": "dcfa00827d0aba389585bae7e7e2a626c0d896c496f11637c6003933c9f2c5aa"
+        },
+        {
+          "file": "train/guava/guava_1781093021139.jpg",
+          "source": "raw/guava/guava_1781093021139.jpg",
+          "timestamp_ms": 1781093021139,
+          "sanitized": false,
+          "sha256": "e2d2273582e15396104512c2ad76c2efc11c4d981cd6e22e94c30b682612906f"
+        },
+        {
+          "file": "train/guava/guava_1781093021390.jpg",
+          "source": "raw/guava/guava_1781093021390.jpg",
+          "timestamp_ms": 1781093021390,
+          "sanitized": false,
+          "sha256": "0fb66db3a859a56efd680770859e1c4f26e73e8c9d4919bbb66d39a27e185226"
+        },
+        {
+          "file": "train/guava/guava_1781093021641.jpg",
+          "source": "raw/guava/guava_1781093021641.jpg",
+          "timestamp_ms": 1781093021641,
+          "sanitized": false,
+          "sha256": "5eda6d5630ec056cf4718537073a6973fa59eb2a525135ed314d0b4f19f7169c"
+        },
+        {
+          "file": "train/guava/guava_1781093021889.jpg",
+          "source": "raw/guava/guava_1781093021889.jpg",
+          "timestamp_ms": 1781093021889,
+          "sanitized": false,
+          "sha256": "49b391b09a2f1733becefb69fd9beb1dc8c8d99dcd7c2f0e0635deab6547a0c0"
+        },
+        {
+          "file": "train/guava/guava_1781093022141.jpg",
+          "source": "raw/guava/guava_1781093022141.jpg",
+          "timestamp_ms": 1781093022141,
+          "sanitized": false,
+          "sha256": "63d368fd8582b9e601fbb2e579e263ef6eb797df430ecde863de22bd9c589943"
+        },
+        {
+          "file": "train/guava/guava_1781093022390.jpg",
+          "source": "raw/guava/guava_1781093022390.jpg",
+          "timestamp_ms": 1781093022390,
+          "sanitized": false,
+          "sha256": "c00187cef5d4de7bfb488603b70dee96016dc9032e91c7dec033e6a8372d72aa"
+        },
+        {
+          "file": "train/guava/guava_1781093022654.jpg",
+          "source": "raw/guava/guava_1781093022654.jpg",
+          "timestamp_ms": 1781093022654,
+          "sanitized": false,
+          "sha256": "d8a45e711be431e40dbb5bb06b9870ae1c5a0c3c34b225072dcc0017b94b76a9"
+        }
+      ],
+      "test_files": [
+        {
+          "file": "test/guava/guava_1781093024890.jpg",
+          "source": "raw/guava/guava_1781093024890.jpg",
+          "timestamp_ms": 1781093024890,
+          "sanitized": false,
+          "sha256": "d831ceb3bcf1a47dd32e3c9e8feefdcd0c9487eda73cd87d9d6c5979fc9483e8"
+        },
+        {
+          "file": "test/guava/guava_1781093025140.jpg",
+          "source": "raw/guava/guava_1781093025140.jpg",
+          "timestamp_ms": 1781093025140,
+          "sanitized": false,
+          "sha256": "7e880382e718bf089abd1c6e5a0618c2fa6010dfba978ff74b33dc042fcbcc66"
+        },
+        {
+          "file": "test/guava/guava_1781093025394.jpg",
+          "source": "raw/guava/guava_1781093025394.jpg",
+          "timestamp_ms": 1781093025394,
+          "sanitized": false,
+          "sha256": "a4ce29fda75a432652fb704c198095a32b9c598de5cd21dcd914ff769e458088"
+        },
+        {
+          "file": "test/guava/guava_1781093025643.jpg",
+          "source": "raw/guava/guava_1781093025643.jpg",
+          "timestamp_ms": 1781093025643,
+          "sanitized": false,
+          "sha256": "2c8dfdd92338cc18c8ede8952a46d8ddef9905a883ed97ac405d57f11600cd72"
+        },
+        {
+          "file": "test/guava/guava_1781093025897.jpg",
+          "source": "raw/guava/guava_1781093025897.jpg",
+          "timestamp_ms": 1781093025897,
+          "sanitized": false,
+          "sha256": "46ed4b01d82cf1c6c5302ed1b0127150cfd2fae945a875ae3d5c7b61f36a93cf"
+        },
+        {
+          "file": "test/guava/guava_1781093026148.jpg",
+          "source": "raw/guava/guava_1781093026148.jpg",
+          "timestamp_ms": 1781093026148,
+          "sanitized": false,
+          "sha256": "187117265c7c77c2a3f8d4435aa3bc9ab4ff92520b23563c03f805f8dff0261e"
+        },
+        {
+          "file": "test/guava/guava_1781093026392.jpg",
+          "source": "raw/guava/guava_1781093026392.jpg",
+          "timestamp_ms": 1781093026392,
+          "sanitized": false,
+          "sha256": "833c3f4c574975c64ede0a18bdc60558a0a082ce8817de0ba94401173b12958e"
+        },
+        {
+          "file": "test/guava/guava_1781093026648.jpg",
+          "source": "raw/guava/guava_1781093026648.jpg",
+          "timestamp_ms": 1781093026648,
+          "sanitized": false,
+          "sha256": "4d6e9c04d31088b56ebe4580051ca32e47ff213783067de5241dbf24eb14d668"
+        },
+        {
+          "file": "test/guava/guava_1781093026899.jpg",
+          "source": "raw/guava/guava_1781093026899.jpg",
+          "timestamp_ms": 1781093026899,
+          "sanitized": false,
+          "sha256": "7edb5e2d6e7cdea55abffbc0b1b363ff79442f04601b5a2a1dcc13969f0486d9"
+        },
+        {
+          "file": "test/guava/guava_1781093027149.jpg",
+          "source": "raw/guava/guava_1781093027149.jpg",
+          "timestamp_ms": 1781093027149,
+          "sanitized": false,
+          "sha256": "60e08eb6fefc1cac8c0daa85109318b39511d5b81228a4230f337c8244f73691"
+        },
+        {
+          "file": "test/guava/guava_1781093027395.jpg",
+          "source": "raw/guava/guava_1781093027395.jpg",
+          "timestamp_ms": 1781093027395,
+          "sanitized": false,
+          "sha256": "1953528cd6a6c29db081568cf2a7be5519e338cfee44766ef673e1b0f1b0afda"
+        },
+        {
+          "file": "test/guava/guava_1781093027648.jpg",
+          "source": "raw/guava/guava_1781093027648.jpg",
+          "timestamp_ms": 1781093027648,
+          "sanitized": false,
+          "sha256": "5a680013ef8329dc3a9f3e9e2858de93a12b29acc630714f56cd18bd8b40f50e"
+        },
+        {
+          "file": "test/guava/guava_1781093027897.jpg",
+          "source": "raw/guava/guava_1781093027897.jpg",
+          "timestamp_ms": 1781093027897,
+          "sanitized": false,
+          "sha256": "3bbbf15bac767b64ae3d7440d9e82d6c5e6ec7b15fb58981682f4668498a085c"
+        },
+        {
+          "file": "test/guava/guava_1781093028146.jpg",
+          "source": "raw/guava/guava_1781093028146.jpg",
+          "timestamp_ms": 1781093028146,
+          "sanitized": false,
+          "sha256": "384f32dfb7222ba22f22882a37c60cce9c84fe3697ce2c7f7242c5427909e2af"
+        },
+        {
+          "file": "test/guava/guava_1781093028396.jpg",
+          "source": "raw/guava/guava_1781093028396.jpg",
+          "timestamp_ms": 1781093028396,
+          "sanitized": false,
+          "sha256": "e0aafb5f9605973de0e2284420e491c92b434aeca3b781d6cd8e1aff169aa5c1"
+        },
+        {
+          "file": "test/guava/guava_1781093028644.jpg",
+          "source": "raw/guava/guava_1781093028644.jpg",
+          "timestamp_ms": 1781093028644,
+          "sanitized": false,
+          "sha256": "cc2a3b463e63453d30e0168ea50e5d158319a755abbf80a72545249ef22e93a5"
+        },
+        {
+          "file": "test/guava/guava_1781093028895.jpg",
+          "source": "raw/guava/guava_1781093028895.jpg",
+          "timestamp_ms": 1781093028895,
+          "sanitized": false,
+          "sha256": "514904104edfaf6224fd1c3797f5398e616f45382d70f65d411196b90da0bca2"
+        },
+        {
+          "file": "test/guava/guava_1781093029139.jpg",
+          "source": "raw/guava/guava_1781093029139.jpg",
+          "timestamp_ms": 1781093029139,
+          "sanitized": false,
+          "sha256": "7b77fa5debcb8e2b6cec0a4bf8c8300dea0b54005a84cbb6ad26922760d83209"
+        },
+        {
+          "file": "test/guava/guava_1781093029394.jpg",
+          "source": "raw/guava/guava_1781093029394.jpg",
+          "timestamp_ms": 1781093029394,
+          "sanitized": false,
+          "sha256": "0af29964d891ae7c41276ee23763e860708a9c6451f1ec7cfd71949875247e16"
+        },
+        {
+          "file": "test/guava/guava_1781093029643.jpg",
+          "source": "raw/guava/guava_1781093029643.jpg",
+          "timestamp_ms": 1781093029643,
+          "sanitized": false,
+          "sha256": "565d6c25b553cdf2fc4afbf21fef170f4ae21cc6f4f34a149aad45f8437cb4d7"
+        },
+        {
+          "file": "test/guava/guava_1781093029894.jpg",
+          "source": "raw/guava/guava_1781093029894.jpg",
+          "timestamp_ms": 1781093029894,
+          "sanitized": false,
+          "sha256": "0a96561cc1c02443fe2743dda2793ec551ecc4a69f5a6320128a6315ca61b0e6"
+        },
+        {
+          "file": "test/guava/guava_1781093030143.jpg",
+          "source": "raw/guava/guava_1781093030143.jpg",
+          "timestamp_ms": 1781093030143,
+          "sanitized": false,
+          "sha256": "6af21693ae8f0cd6e46de934d3d9da7d1dbb2e82d20f24cfe8ad03492e4fa4a9"
+        },
+        {
+          "file": "test/guava/guava_1781093030391.jpg",
+          "source": "raw/guava/guava_1781093030391.jpg",
+          "timestamp_ms": 1781093030391,
+          "sanitized": false,
+          "sha256": "6051885866d52f2df287e2d9243de277a3da6d335564299031f4210a6af3098a"
+        },
+        {
+          "file": "test/guava/guava_1781093030642.jpg",
+          "source": "raw/guava/guava_1781093030642.jpg",
+          "timestamp_ms": 1781093030642,
+          "sanitized": false,
+          "sha256": "7a44d25fe45e256eac3246a2ca0f2000a2a49635d2dfc50eae6886d906cfabc4"
+        },
+        {
+          "file": "test/guava/guava_1781093030890.jpg",
+          "source": "raw/guava/guava_1781093030890.jpg",
+          "timestamp_ms": 1781093030890,
+          "sanitized": false,
+          "sha256": "8895f781d4226b023bbac6ec30c1b4a9880e90a7b14e4ae816d6c79097e2435d"
+        },
+        {
+          "file": "test/guava/guava_1781093031142.jpg",
+          "source": "raw/guava/guava_1781093031142.jpg",
+          "timestamp_ms": 1781093031142,
+          "sanitized": false,
+          "sha256": "8786e5f30a207388c1b0167d3f9575fbad3373a3843acb57e28910943af56aef"
+        },
+        {
+          "file": "test/guava/guava_1781093031393.jpg",
+          "source": "raw/guava/guava_1781093031393.jpg",
+          "timestamp_ms": 1781093031393,
+          "sanitized": false,
+          "sha256": "f8ba04b7ddd760fa04777737eb02a7b8d6602b8a7652ea11cf16f522eaf598c4"
+        },
+        {
+          "file": "test/guava/guava_1781093031644.jpg",
+          "source": "raw/guava/guava_1781093031644.jpg",
+          "timestamp_ms": 1781093031644,
+          "sanitized": false,
+          "sha256": "eff73fd8e8e3aa8560743aa6bcdc8348ad7239f44d9bbe79eafa9e704597b35a"
+        },
+        {
+          "file": "test/guava/guava_1781093031894.jpg",
+          "source": "raw/guava/guava_1781093031894.jpg",
+          "timestamp_ms": 1781093031894,
+          "sanitized": false,
+          "sha256": "b72adf3ddda47cc326e0924ffb9afa24cbb4cbc4fa244ec13e4526c8b8bf1b3a"
+        },
+        {
+          "file": "test/guava/guava_1781093032144.jpg",
+          "source": "raw/guava/guava_1781093032144.jpg",
+          "timestamp_ms": 1781093032144,
+          "sanitized": false,
+          "sha256": "fa60a4c3ff551587b77c1dee8f67b0fe1002909c65152988f02a4e7041bf51aa"
+        },
+        {
+          "file": "test/guava/guava_1781093032392.jpg",
+          "source": "raw/guava/guava_1781093032392.jpg",
+          "timestamp_ms": 1781093032392,
+          "sanitized": false,
+          "sha256": "ff6515e97079cc985e8fb852776cf31fd980c08846f2a2c1d890e1e21079eb25"
+        },
+        {
+          "file": "test/guava/guava_1781093032640.jpg",
+          "source": "raw/guava/guava_1781093032640.jpg",
+          "timestamp_ms": 1781093032640,
+          "sanitized": false,
+          "sha256": "b4a72074656ce01e8ca453910a3af5b6686892430b514a2e2062862d5ec5d610"
+        },
+        {
+          "file": "test/guava/guava_1781093032896.jpg",
+          "source": "raw/guava/guava_1781093032896.jpg",
+          "timestamp_ms": 1781093032896,
+          "sanitized": false,
+          "sha256": "7056fab75f445e7184bc35330fbd7b792c29c4e2c9864ad997dbf3cfe1a1f8a5"
+        },
+        {
+          "file": "test/guava/guava_1781093033147.jpg",
+          "source": "raw/guava/guava_1781093033147.jpg",
+          "timestamp_ms": 1781093033147,
+          "sanitized": false,
+          "sha256": "609b27762c0e35ad0f2ea81a03545faf7d24b8f8172300a4b37b994e7da26b35"
+        },
+        {
+          "file": "test/guava/guava_1781093033389.jpg",
+          "source": "raw/guava/guava_1781093033389.jpg",
+          "timestamp_ms": 1781093033389,
+          "sanitized": false,
+          "sha256": "bd7d35286cae1e2e45ae94abd2f0712ec8fec01dba66d5b6089a59b72620cb8d"
+        },
+        {
+          "file": "test/guava/guava_1781093033651.jpg",
+          "source": "raw/guava/guava_1781093033651.jpg",
+          "timestamp_ms": 1781093033651,
+          "sanitized": false,
+          "sha256": "813c427c2a1787b270a856a7dfc7425b807da61a554ae8690a2ed3db27962c07"
+        },
+        {
+          "file": "test/guava/guava_1781093033901.jpg",
+          "source": "raw/guava/guava_1781093033901.jpg",
+          "timestamp_ms": 1781093033901,
+          "sanitized": false,
+          "sha256": "361dbcfc6b3a9788852dc8037df11fc86e62a9a64f9f3533aa5e46bae7db44f1"
+        },
+        {
+          "file": "test/guava/guava_1781093034140.jpg",
+          "source": "raw/guava/guava_1781093034140.jpg",
+          "timestamp_ms": 1781093034140,
+          "sanitized": false,
+          "sha256": "edcfc7706cf476f8a30f84d2763b57ac560fa43082777a3c986f91a6e9767122"
+        },
+        {
+          "file": "test/guava/guava_1781093034398.jpg",
+          "source": "raw/guava/guava_1781093034398.jpg",
+          "timestamp_ms": 1781093034398,
+          "sanitized": false,
+          "sha256": "edcfc7706cf476f8a30f84d2763b57ac560fa43082777a3c986f91a6e9767122"
+        },
+        {
+          "file": "test/guava/guava_1781093034643.jpg",
+          "source": "raw/guava/guava_1781093034643.jpg",
+          "timestamp_ms": 1781093034643,
+          "sanitized": false,
+          "sha256": "edcfc7706cf476f8a30f84d2763b57ac560fa43082777a3c986f91a6e9767122"
+        },
+        {
+          "file": "test/guava/guava_1781093034895.jpg",
+          "source": "raw/guava/guava_1781093034895.jpg",
+          "timestamp_ms": 1781093034895,
+          "sanitized": false,
+          "sha256": "53cebfcb4a9791c15d3d5ce1b501061999d35fc208f4ad12f1b461e08cd85d46"
+        },
+        {
+          "file": "test/guava/guava_1781093035152.jpg",
+          "source": "raw/guava/guava_1781093035152.jpg",
+          "timestamp_ms": 1781093035152,
+          "sanitized": false,
+          "sha256": "53cebfcb4a9791c15d3d5ce1b501061999d35fc208f4ad12f1b461e08cd85d46"
+        },
+        {
+          "file": "test/guava/guava_1781093035401.jpg",
+          "source": "raw/guava/guava_1781093035401.jpg",
+          "timestamp_ms": 1781093035401,
+          "sanitized": false,
+          "sha256": "97c83c9c350f3527065f863bd5e62af9a0835234a965dd6a291ba06d039050ad"
+        }
+      ]
+    },
+    "powerbank": {
+      "n_raw": 164,
+      "n_sessions": 1,
+      "span_seconds": 40.8,
+      "n_train": 111,
+      "n_test": 45,
+      "n_dropped_guard": 8,
+      "train_files": [
+        {
+          "file": "train/powerbank/powerbank_1781093129390.jpg",
+          "source": "raw/powerbank/powerbank_1781093129390.jpg",
+          "timestamp_ms": 1781093129390,
+          "sanitized": false,
+          "sha256": "5c8ef6d9a05dc22c42035e6f14db6054e2c60c61c603230e11f2b3c3fabebba5"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093129643.jpg",
+          "source": "raw/powerbank/powerbank_1781093129643.jpg",
+          "timestamp_ms": 1781093129643,
+          "sanitized": false,
+          "sha256": "de78b4296c4f267b9c0d217850e33d035a4cb9a8b2a1e7121eddcb7b9559e20e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093129892.jpg",
+          "source": "raw/powerbank/powerbank_1781093129892.jpg",
+          "timestamp_ms": 1781093129892,
+          "sanitized": false,
+          "sha256": "cc803ebb9bf281bd18bad61405bb6f1afd06ddbf0d283b29e2da05fd7e3fc5a3"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093130147.jpg",
+          "source": "raw/powerbank/powerbank_1781093130147.jpg",
+          "timestamp_ms": 1781093130147,
+          "sanitized": false,
+          "sha256": "057e80f49cbabb0c0091bef93cd9be1fdbf7d55356ec8426bcd19a1f85f4eae5"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093130395.jpg",
+          "source": "raw/powerbank/powerbank_1781093130395.jpg",
+          "timestamp_ms": 1781093130395,
+          "sanitized": false,
+          "sha256": "dbfcb63934185a3057e2a30641be24f1cbc7401183eb2ed97e6acb7e260d4351"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093130643.jpg",
+          "source": "raw/powerbank/powerbank_1781093130643.jpg",
+          "timestamp_ms": 1781093130643,
+          "sanitized": false,
+          "sha256": "e878a3f6f7265552c6fe9f000d9666c6fd9b33b506b029dfc32a3d7e7809d4cf"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093130894.jpg",
+          "source": "raw/powerbank/powerbank_1781093130894.jpg",
+          "timestamp_ms": 1781093130894,
+          "sanitized": false,
+          "sha256": "805ca592e01bef2cb7fa31c084b93625e1fa238d9b5c6a5f6ed9cb7cc8370293"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093131143.jpg",
+          "source": "raw/powerbank/powerbank_1781093131143.jpg",
+          "timestamp_ms": 1781093131143,
+          "sanitized": false,
+          "sha256": "dedd2a99ad559cc75d8f3d4c99e31cef6c1558c83a8b6a2ea5caedbc31543630"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093131393.jpg",
+          "source": "raw/powerbank/powerbank_1781093131393.jpg",
+          "timestamp_ms": 1781093131393,
+          "sanitized": false,
+          "sha256": "596b08cdae84605f833babe0c88ac58b13dfc169f855b8b14ee526f2a2d14ca0"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093131643.jpg",
+          "source": "raw/powerbank/powerbank_1781093131643.jpg",
+          "timestamp_ms": 1781093131643,
+          "sanitized": false,
+          "sha256": "e3438e81c9b9750c325062c82956b3170361065e1f97091fa902ccd8605c8c7e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093131893.jpg",
+          "source": "raw/powerbank/powerbank_1781093131893.jpg",
+          "timestamp_ms": 1781093131893,
+          "sanitized": false,
+          "sha256": "5db942a992aa14ba52adc4713820cf6cfd4863feb04cbc6cf7db5e5b33ebe732"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093132139.jpg",
+          "source": "raw/powerbank/powerbank_1781093132139.jpg",
+          "timestamp_ms": 1781093132139,
+          "sanitized": false,
+          "sha256": "1b696e8b9554a910f6c7c9e9be85dd22149f7b03442f1c588e745927d450c74a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093132389.jpg",
+          "source": "raw/powerbank/powerbank_1781093132389.jpg",
+          "timestamp_ms": 1781093132389,
+          "sanitized": false,
+          "sha256": "71a2ce96995519a23b77844957e438047942742fc98c0d2df94e5ea6d9fcbdd3"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093132645.jpg",
+          "source": "raw/powerbank/powerbank_1781093132645.jpg",
+          "timestamp_ms": 1781093132645,
+          "sanitized": false,
+          "sha256": "b086a9c8b0c9724e08b9f5091792c3250b5e038db3ef697eee4e8bbc51e16f48"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093132898.jpg",
+          "source": "raw/powerbank/powerbank_1781093132898.jpg",
+          "timestamp_ms": 1781093132898,
+          "sanitized": false,
+          "sha256": "7a9a406b6d328a14256e2b864a1b427de0fd874f1838879129f2d9c78ed9d8c0"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093133149.jpg",
+          "source": "raw/powerbank/powerbank_1781093133149.jpg",
+          "timestamp_ms": 1781093133149,
+          "sanitized": false,
+          "sha256": "2c650d11ae6787642ce266223f72e4a783ad37fcfb4ea73adbbfd5e4be8a076e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093133399.jpg",
+          "source": "raw/powerbank/powerbank_1781093133399.jpg",
+          "timestamp_ms": 1781093133399,
+          "sanitized": false,
+          "sha256": "fe2b62a8279ac35ba2234d7b7c1423116383aeb3665b586aa2c8dd3c4c98b6b8"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093133649.jpg",
+          "source": "raw/powerbank/powerbank_1781093133649.jpg",
+          "timestamp_ms": 1781093133649,
+          "sanitized": false,
+          "sha256": "d09e054f4bb6b9cfdd0d210303c9f5e6949b33fea2d1051d1eeeb76d1fefd287"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093133889.jpg",
+          "source": "raw/powerbank/powerbank_1781093133889.jpg",
+          "timestamp_ms": 1781093133889,
+          "sanitized": false,
+          "sha256": "0da635211fde9e838fd09f13f0499458bc6cb0aa693df4ac92a1ae22a8754040"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093134148.jpg",
+          "source": "raw/powerbank/powerbank_1781093134148.jpg",
+          "timestamp_ms": 1781093134148,
+          "sanitized": false,
+          "sha256": "526ff1080cb431405038999a2e7cda490622ddf71d634af74b94138b7acf3e43"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093134399.jpg",
+          "source": "raw/powerbank/powerbank_1781093134399.jpg",
+          "timestamp_ms": 1781093134399,
+          "sanitized": false,
+          "sha256": "45c34c71d995eb115e5b36a345eb881e13887ad544d373565c6987f1020688f1"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093134649.jpg",
+          "source": "raw/powerbank/powerbank_1781093134649.jpg",
+          "timestamp_ms": 1781093134649,
+          "sanitized": false,
+          "sha256": "4b688abf7a2f112b9442227d59d1b0351276da8d2b17da1efa2f7f19e0fd3311"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093134898.jpg",
+          "source": "raw/powerbank/powerbank_1781093134898.jpg",
+          "timestamp_ms": 1781093134898,
+          "sanitized": false,
+          "sha256": "9077649b2f26e6a533183baab04e477a529b225ca3b92a40cad9ce65597e02e7"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093135148.jpg",
+          "source": "raw/powerbank/powerbank_1781093135148.jpg",
+          "timestamp_ms": 1781093135148,
+          "sanitized": false,
+          "sha256": "9077649b2f26e6a533183baab04e477a529b225ca3b92a40cad9ce65597e02e7"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093135397.jpg",
+          "source": "raw/powerbank/powerbank_1781093135397.jpg",
+          "timestamp_ms": 1781093135397,
+          "sanitized": false,
+          "sha256": "c7b216f061df398644c1f795a83d7077a216a58f398106732a63e2d2a5e18546"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093135643.jpg",
+          "source": "raw/powerbank/powerbank_1781093135643.jpg",
+          "timestamp_ms": 1781093135643,
+          "sanitized": false,
+          "sha256": "1af415fe21ebb85f300b5340fce5cca069afddbf7001a4258caa0beda4f72d95"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093135890.jpg",
+          "source": "raw/powerbank/powerbank_1781093135890.jpg",
+          "timestamp_ms": 1781093135890,
+          "sanitized": false,
+          "sha256": "7d60dda31e1122b317fdffd4500b650ce6ccd470396c3ebdcf3b874f75dfa557"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093136141.jpg",
+          "source": "raw/powerbank/powerbank_1781093136141.jpg",
+          "timestamp_ms": 1781093136141,
+          "sanitized": false,
+          "sha256": "c52b1c77b4faae6b1f2b7b62a68401451488f8f1e9b2aba176a2fceaf18872c5"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093136399.jpg",
+          "source": "raw/powerbank/powerbank_1781093136399.jpg",
+          "timestamp_ms": 1781093136399,
+          "sanitized": false,
+          "sha256": "75462f5fb7185f7705bdd99d38e75d3468b81b3a79b4bafb65f9f968875092bf"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093136648.jpg",
+          "source": "raw/powerbank/powerbank_1781093136648.jpg",
+          "timestamp_ms": 1781093136648,
+          "sanitized": false,
+          "sha256": "a3a8af3773d73f6638871fcdc90acf16c9eb82ab1d319eda18f6ee74309b3722"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093136898.jpg",
+          "source": "raw/powerbank/powerbank_1781093136898.jpg",
+          "timestamp_ms": 1781093136898,
+          "sanitized": false,
+          "sha256": "ae358530d3f84a74dd8b6c8b1bc5cfce583024671bd5f8c9cd110be8601956cc"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093137147.jpg",
+          "source": "raw/powerbank/powerbank_1781093137147.jpg",
+          "timestamp_ms": 1781093137147,
+          "sanitized": false,
+          "sha256": "855f6faa713a67f9353159666dbb7750c0fa911611a78627b073aa6f7074bb6f"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093137392.jpg",
+          "source": "raw/powerbank/powerbank_1781093137392.jpg",
+          "timestamp_ms": 1781093137392,
+          "sanitized": false,
+          "sha256": "7807f7620d14a18fdad9557ee1e14356ce9f701fd8571bb95a7edbf8ecbd3233"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093137646.jpg",
+          "source": "raw/powerbank/powerbank_1781093137646.jpg",
+          "timestamp_ms": 1781093137646,
+          "sanitized": false,
+          "sha256": "d4454c96e943c9594579e2d7aa3e51614332a0bb813336e2450417aa1e24c34a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093137895.jpg",
+          "source": "raw/powerbank/powerbank_1781093137895.jpg",
+          "timestamp_ms": 1781093137895,
+          "sanitized": false,
+          "sha256": "da22ce1fa01323d87bde2ad86999969e4f7eb3768ace130d9a6a9e8d4459e443"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093138142.jpg",
+          "source": "raw/powerbank/powerbank_1781093138142.jpg",
+          "timestamp_ms": 1781093138142,
+          "sanitized": false,
+          "sha256": "1188817ae769a6327c86c485b67f6c5071a63d7aef21bbeab28e52806900f026"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093138394.jpg",
+          "source": "raw/powerbank/powerbank_1781093138394.jpg",
+          "timestamp_ms": 1781093138394,
+          "sanitized": false,
+          "sha256": "9889c60a687dafec88bea99fa39e32b5bae0f61871f5ad5d7d55f08a31f9ea2a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093138642.jpg",
+          "source": "raw/powerbank/powerbank_1781093138642.jpg",
+          "timestamp_ms": 1781093138642,
+          "sanitized": false,
+          "sha256": "09ab7afdce9f1e051de0c227633614cbd45f8d6a4a851aac68c3eae4fae33502"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093138893.jpg",
+          "source": "raw/powerbank/powerbank_1781093138893.jpg",
+          "timestamp_ms": 1781093138893,
+          "sanitized": false,
+          "sha256": "d0897c7309bb48278f6d54e946ac35eb1bbd97178d3cfa9d5240edbdd8118b94"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093139143.jpg",
+          "source": "raw/powerbank/powerbank_1781093139143.jpg",
+          "timestamp_ms": 1781093139143,
+          "sanitized": false,
+          "sha256": "859347520f011270faf8e4dedae0ee08676308f6f93e407c35080290428fef46"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093139394.jpg",
+          "source": "raw/powerbank/powerbank_1781093139394.jpg",
+          "timestamp_ms": 1781093139394,
+          "sanitized": false,
+          "sha256": "38503b7a9e762877cdc144b970bdb3a2b8ca6be780104b5a50201f70f50465e4"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093139646.jpg",
+          "source": "raw/powerbank/powerbank_1781093139646.jpg",
+          "timestamp_ms": 1781093139646,
+          "sanitized": false,
+          "sha256": "ad1204ae444cea85c36673d2ee928fafc940b2475d5ec43af30769e4803d3da6"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093139890.jpg",
+          "source": "raw/powerbank/powerbank_1781093139890.jpg",
+          "timestamp_ms": 1781093139890,
+          "sanitized": false,
+          "sha256": "8b7afabca5e58cbba68f26a9f6649e2d7da12ed28e2773074d87543d46d397c5"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093140139.jpg",
+          "source": "raw/powerbank/powerbank_1781093140139.jpg",
+          "timestamp_ms": 1781093140139,
+          "sanitized": false,
+          "sha256": "f7319bdec989ba808aede3bc2d98ed8c44489ebef9efe84065f47dada7d80a06"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093140398.jpg",
+          "source": "raw/powerbank/powerbank_1781093140398.jpg",
+          "timestamp_ms": 1781093140398,
+          "sanitized": false,
+          "sha256": "7bba9b23205151e203a471d2da689f4e4ae8f7d8688aae5dcf7a89578ab01ddb"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093140647.jpg",
+          "source": "raw/powerbank/powerbank_1781093140647.jpg",
+          "timestamp_ms": 1781093140647,
+          "sanitized": false,
+          "sha256": "d77c439660a03139f0c60b6a4680f2cb67c3633e22d5075d3d043102e94032f4"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093140898.jpg",
+          "source": "raw/powerbank/powerbank_1781093140898.jpg",
+          "timestamp_ms": 1781093140898,
+          "sanitized": false,
+          "sha256": "ee971bbbc9e8182f9fb74f955763ac9a0ee2029381582d592d1838c1e82fca7d"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093141146.jpg",
+          "source": "raw/powerbank/powerbank_1781093141146.jpg",
+          "timestamp_ms": 1781093141146,
+          "sanitized": false,
+          "sha256": "a980c8530a666700df837d7f6f586926c88ffd6939e9003242b161b832136028"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093141395.jpg",
+          "source": "raw/powerbank/powerbank_1781093141395.jpg",
+          "timestamp_ms": 1781093141395,
+          "sanitized": false,
+          "sha256": "a340e4165d4d695f400c861c89bf9b92bc2a0e294610e34114fb07cc2b768844"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093141644.jpg",
+          "source": "raw/powerbank/powerbank_1781093141644.jpg",
+          "timestamp_ms": 1781093141644,
+          "sanitized": false,
+          "sha256": "024622d5746319961d8df600f7acf43b3fb2f96941ecfc9d5db97dee29b98e67"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093141896.jpg",
+          "source": "raw/powerbank/powerbank_1781093141896.jpg",
+          "timestamp_ms": 1781093141896,
+          "sanitized": false,
+          "sha256": "bbc4e1b033a2d4a3838a8432d89e281c470e214a69a62eda2ec1a67bff772214"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093142146.jpg",
+          "source": "raw/powerbank/powerbank_1781093142146.jpg",
+          "timestamp_ms": 1781093142146,
+          "sanitized": false,
+          "sha256": "f5cbddc6019a62e186a8b8bb31743636843c91534fae540bbf9f4aff617ac49a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093142389.jpg",
+          "source": "raw/powerbank/powerbank_1781093142389.jpg",
+          "timestamp_ms": 1781093142389,
+          "sanitized": false,
+          "sha256": "89ef20893607bae381ce6e1599bbe5bda74f33c3e1a7bd4cda2c7c98c9fe79e1"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093142643.jpg",
+          "source": "raw/powerbank/powerbank_1781093142643.jpg",
+          "timestamp_ms": 1781093142643,
+          "sanitized": false,
+          "sha256": "9a782fbddd080d52effdea6406cde0c8c333490b3a3b9bec12a2af82664f121f"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093142894.jpg",
+          "source": "raw/powerbank/powerbank_1781093142894.jpg",
+          "timestamp_ms": 1781093142894,
+          "sanitized": false,
+          "sha256": "99811f783afc54c9f75b68ee594357bbb8571014c2c70ee94432c49e06e3bd31"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093143143.jpg",
+          "source": "raw/powerbank/powerbank_1781093143143.jpg",
+          "timestamp_ms": 1781093143143,
+          "sanitized": false,
+          "sha256": "7049d3603d0654ec9dfdc8a1b17f34bedb7746f0c17e6294aed2517b49b27040"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093143394.jpg",
+          "source": "raw/powerbank/powerbank_1781093143394.jpg",
+          "timestamp_ms": 1781093143394,
+          "sanitized": false,
+          "sha256": "9c1a6bf034bd9965570687ca102395e9d3b5031f065d13573728a76c54abde73"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093143645.jpg",
+          "source": "raw/powerbank/powerbank_1781093143645.jpg",
+          "timestamp_ms": 1781093143645,
+          "sanitized": false,
+          "sha256": "1278ec3291fd39db1ac74fd348bcde5982954a2ec7d5922e8194b4f7149cee84"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093143892.jpg",
+          "source": "raw/powerbank/powerbank_1781093143892.jpg",
+          "timestamp_ms": 1781093143892,
+          "sanitized": false,
+          "sha256": "597f4f99cc1e93d3e5000cceafd7895e60707971230a9df2c6bd23ed0c371132"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093144141.jpg",
+          "source": "raw/powerbank/powerbank_1781093144141.jpg",
+          "timestamp_ms": 1781093144141,
+          "sanitized": false,
+          "sha256": "8fba1b2f3a3b96e4df722120490ea033f16ecff7c7b3274c396c7eb05975a085"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093144393.jpg",
+          "source": "raw/powerbank/powerbank_1781093144393.jpg",
+          "timestamp_ms": 1781093144393,
+          "sanitized": false,
+          "sha256": "dc2e0e63347d23424b20dcd4c1736400e76022b77aa06268c6ca453a9d936a10"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093144640.jpg",
+          "source": "raw/powerbank/powerbank_1781093144640.jpg",
+          "timestamp_ms": 1781093144640,
+          "sanitized": false,
+          "sha256": "9c2a72c26016eb87418396d6160375277137192e7b01e1da39749585d55d4ba1"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093144904.jpg",
+          "source": "raw/powerbank/powerbank_1781093144904.jpg",
+          "timestamp_ms": 1781093144904,
+          "sanitized": false,
+          "sha256": "0aae3eb4a7cbe6134657a7aba1656bc8dd130ff6034eb1ebe33fff7b7a6666b9"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093145154.jpg",
+          "source": "raw/powerbank/powerbank_1781093145154.jpg",
+          "timestamp_ms": 1781093145154,
+          "sanitized": false,
+          "sha256": "cc06b64055348ca2c8443ca68f384529c8d71bb43cdc3d20266d78e5191bdb89"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093145392.jpg",
+          "source": "raw/powerbank/powerbank_1781093145392.jpg",
+          "timestamp_ms": 1781093145392,
+          "sanitized": false,
+          "sha256": "81f56e072ba6a338214408aa376e74bf0743bfd29875c2b50e08f2f516aa7011"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093145647.jpg",
+          "source": "raw/powerbank/powerbank_1781093145647.jpg",
+          "timestamp_ms": 1781093145647,
+          "sanitized": false,
+          "sha256": "be285c60e7435d440dd37305cd8af325981eb908cff9ec0949b66cc91f8afbc0"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093145903.jpg",
+          "source": "raw/powerbank/powerbank_1781093145903.jpg",
+          "timestamp_ms": 1781093145903,
+          "sanitized": false,
+          "sha256": "d402ebbc462f5da1dff3d88f7dc0293778c9f399233c19820466da6e6f7bfc76"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093146152.jpg",
+          "source": "raw/powerbank/powerbank_1781093146152.jpg",
+          "timestamp_ms": 1781093146152,
+          "sanitized": false,
+          "sha256": "c6238aaf8f2f59d3eb607ea73932dc0f46440dd81f5abb0257436ddd449f6332"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093146402.jpg",
+          "source": "raw/powerbank/powerbank_1781093146402.jpg",
+          "timestamp_ms": 1781093146402,
+          "sanitized": false,
+          "sha256": "c0f363ab93508e1b8569e7d6d6e323ea2b7f8cc8daee5e7cf8789abd82062f04"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093146651.jpg",
+          "source": "raw/powerbank/powerbank_1781093146651.jpg",
+          "timestamp_ms": 1781093146651,
+          "sanitized": false,
+          "sha256": "6d546d8cced0e992658deeecc64eda5b9e884665d421eef5d2a492cff5518f00"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093146901.jpg",
+          "source": "raw/powerbank/powerbank_1781093146901.jpg",
+          "timestamp_ms": 1781093146901,
+          "sanitized": false,
+          "sha256": "0eb0fc4e7b9dd044da8656c3eb14d9f57035ca9929b503bf35bb6ef22756bd18"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093147140.jpg",
+          "source": "raw/powerbank/powerbank_1781093147140.jpg",
+          "timestamp_ms": 1781093147140,
+          "sanitized": false,
+          "sha256": "60ba82c789a809914e635fbb1011af64883686041046c75814d88deb3d6384d8"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093147400.jpg",
+          "source": "raw/powerbank/powerbank_1781093147400.jpg",
+          "timestamp_ms": 1781093147400,
+          "sanitized": false,
+          "sha256": "2d7314a7b4bb892e11cab760074beb1463fb79145bf2d7f50aa621ebd7342e23"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093147650.jpg",
+          "source": "raw/powerbank/powerbank_1781093147650.jpg",
+          "timestamp_ms": 1781093147650,
+          "sanitized": false,
+          "sha256": "e707acacf5c80d70555b3398f04323e44a16d9c1cfd0800238ad2a3c9a6998bf"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093147901.jpg",
+          "source": "raw/powerbank/powerbank_1781093147901.jpg",
+          "timestamp_ms": 1781093147901,
+          "sanitized": false,
+          "sha256": "3c52b1d7ee5cee396f9820a9b0aef29782173f8ea372927432bf963b0b8138fd"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093148141.jpg",
+          "source": "raw/powerbank/powerbank_1781093148141.jpg",
+          "timestamp_ms": 1781093148141,
+          "sanitized": false,
+          "sha256": "03efa5d77219ba95ca9de5593bd203b8c210924bbd3f81a634ce4bc6f4c7263e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093148401.jpg",
+          "source": "raw/powerbank/powerbank_1781093148401.jpg",
+          "timestamp_ms": 1781093148401,
+          "sanitized": false,
+          "sha256": "e11952703ee18b7fe5f7f33c1927651b9b5ed70c117f34f34b01e5667649190d"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093148652.jpg",
+          "source": "raw/powerbank/powerbank_1781093148652.jpg",
+          "timestamp_ms": 1781093148652,
+          "sanitized": false,
+          "sha256": "c05f85e0f3ddb0eb5aca23ab5fcac44c2651609d96f963bed7d5a422262f962f"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093148902.jpg",
+          "source": "raw/powerbank/powerbank_1781093148902.jpg",
+          "timestamp_ms": 1781093148902,
+          "sanitized": false,
+          "sha256": "141ccc90d9ec0e492bcc10ed6a96d17a570acad89e13c94e6319b5b72aa21298"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093149152.jpg",
+          "source": "raw/powerbank/powerbank_1781093149152.jpg",
+          "timestamp_ms": 1781093149152,
+          "sanitized": false,
+          "sha256": "4cfd2ccdcea21048e7f6ea084899fc3b44f5da3ef58b6fa34c867f671db5a623"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093149389.jpg",
+          "source": "raw/powerbank/powerbank_1781093149389.jpg",
+          "timestamp_ms": 1781093149389,
+          "sanitized": false,
+          "sha256": "a13bd7edb9a522e76e7f87830035d80091497f2c5dbeac49e500a1aec176cea4"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093149641.jpg",
+          "source": "raw/powerbank/powerbank_1781093149641.jpg",
+          "timestamp_ms": 1781093149641,
+          "sanitized": false,
+          "sha256": "f4c8829cd8a4494f8500f8bc978b313be13d0aef984f79b0d247d715f342a001"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093149901.jpg",
+          "source": "raw/powerbank/powerbank_1781093149901.jpg",
+          "timestamp_ms": 1781093149901,
+          "sanitized": false,
+          "sha256": "fd3d6ffe3d19c253e71e949e6b33a6e0d9699a5c1b5c81913ba01bcad0e39ae9"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093150150.jpg",
+          "source": "raw/powerbank/powerbank_1781093150150.jpg",
+          "timestamp_ms": 1781093150150,
+          "sanitized": false,
+          "sha256": "5c6f50f2eae7a6e522989ae725d3bbfc5081253df36596f8369f00490c8d31f2"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093150390.jpg",
+          "source": "raw/powerbank/powerbank_1781093150390.jpg",
+          "timestamp_ms": 1781093150390,
+          "sanitized": false,
+          "sha256": "7af1e10a8705b1e0d321ecd8db6b09dca1f915b8ff33765808dc65c238e0b788"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093150643.jpg",
+          "source": "raw/powerbank/powerbank_1781093150643.jpg",
+          "timestamp_ms": 1781093150643,
+          "sanitized": false,
+          "sha256": "2a096c51a3feb8b58321ee0ef5f671441715404c9135769d6d840cf617193041"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093150891.jpg",
+          "source": "raw/powerbank/powerbank_1781093150891.jpg",
+          "timestamp_ms": 1781093150891,
+          "sanitized": false,
+          "sha256": "328a2718b206ad0b551c7b1d84eca2bef91918241d6a13dc3de408e3ba10c855"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093151148.jpg",
+          "source": "raw/powerbank/powerbank_1781093151148.jpg",
+          "timestamp_ms": 1781093151148,
+          "sanitized": false,
+          "sha256": "21eca2f8961f76b34418cb12538c0674949ff178c694b23c5a37d51a35ef220a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093151399.jpg",
+          "source": "raw/powerbank/powerbank_1781093151399.jpg",
+          "timestamp_ms": 1781093151399,
+          "sanitized": false,
+          "sha256": "9680e50d3ce664aad1ee3c174f4cddebbdbd208cd07d3bf1c78f19d03ea0a731"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093151641.jpg",
+          "source": "raw/powerbank/powerbank_1781093151641.jpg",
+          "timestamp_ms": 1781093151641,
+          "sanitized": false,
+          "sha256": "8a361ec702c04f28c22b54774ddd09db63de7a6f4dcaa9775b2a9e94b2c5e84e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093151891.jpg",
+          "source": "raw/powerbank/powerbank_1781093151891.jpg",
+          "timestamp_ms": 1781093151891,
+          "sanitized": false,
+          "sha256": "efea6a7a0d62b1582191127e173ea63623d972d2195ebc6e2339940ab74d3a5c"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093152141.jpg",
+          "source": "raw/powerbank/powerbank_1781093152141.jpg",
+          "timestamp_ms": 1781093152141,
+          "sanitized": false,
+          "sha256": "e7e06a22ad7ecd93d3b68a9b13f9f5ee52f59faea10c04d0f7192d19b08263ee"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093152401.jpg",
+          "source": "raw/powerbank/powerbank_1781093152401.jpg",
+          "timestamp_ms": 1781093152401,
+          "sanitized": false,
+          "sha256": "3d0be38ad556ad9886feb21c662e3c5c97bdf99f5e59bc2064a7a9aadba25bfc"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093152651.jpg",
+          "source": "raw/powerbank/powerbank_1781093152651.jpg",
+          "timestamp_ms": 1781093152651,
+          "sanitized": false,
+          "sha256": "7bf4e7118fdfe10551da2261074adccf24b07c3f08d4a724d49c11a93847fd9b"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093152899.jpg",
+          "source": "raw/powerbank/powerbank_1781093152899.jpg",
+          "timestamp_ms": 1781093152899,
+          "sanitized": false,
+          "sha256": "b86ff4a58da8e38381fd7d74e2a03a7e69a50cb9ed3524afefda90f0661e3b02"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093153140.jpg",
+          "source": "raw/powerbank/powerbank_1781093153140.jpg",
+          "timestamp_ms": 1781093153140,
+          "sanitized": false,
+          "sha256": "b70391abab701e0432bbb12bab1beb63af6da98843d6b7290935b7bc033dae4a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093153399.jpg",
+          "source": "raw/powerbank/powerbank_1781093153399.jpg",
+          "timestamp_ms": 1781093153399,
+          "sanitized": false,
+          "sha256": "bfd656588633fda2b21efcb40555b8b5604c5f00071ad92565e2d2728af5238a"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093153650.jpg",
+          "source": "raw/powerbank/powerbank_1781093153650.jpg",
+          "timestamp_ms": 1781093153650,
+          "sanitized": false,
+          "sha256": "857b59692486faa271662208fd8e0d74ded486f7aae51d50dc5b7ca1a40ddff4"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093153899.jpg",
+          "source": "raw/powerbank/powerbank_1781093153899.jpg",
+          "timestamp_ms": 1781093153899,
+          "sanitized": false,
+          "sha256": "6a6a3e4cc6414a513c9befd87e9a76e914ea220a92fa454225ba1f0209e7a717"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093154144.jpg",
+          "source": "raw/powerbank/powerbank_1781093154144.jpg",
+          "timestamp_ms": 1781093154144,
+          "sanitized": false,
+          "sha256": "93b798b59fb11325e3b5d223293f0898ccca1cd6808838f824facf06eb896b67"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093154396.jpg",
+          "source": "raw/powerbank/powerbank_1781093154396.jpg",
+          "timestamp_ms": 1781093154396,
+          "sanitized": false,
+          "sha256": "4aa7432199d9a2d49928af6e91f25320e0e2a8d8f1e4426e2326a8c8310bf9db"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093154652.jpg",
+          "source": "raw/powerbank/powerbank_1781093154652.jpg",
+          "timestamp_ms": 1781093154652,
+          "sanitized": false,
+          "sha256": "acdf081bc507a0d9f54b0f2b7521e7a5b761da2caedf568e004cbe825eb808f3"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093154901.jpg",
+          "source": "raw/powerbank/powerbank_1781093154901.jpg",
+          "timestamp_ms": 1781093154901,
+          "sanitized": false,
+          "sha256": "6511bb2f4a4604a8a4b197c518f76b95351fc40b02b6bdfa75da155697700ebf"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093155152.jpg",
+          "source": "raw/powerbank/powerbank_1781093155152.jpg",
+          "timestamp_ms": 1781093155152,
+          "sanitized": false,
+          "sha256": "b1818d62eb9fba3d7647cbb79de779b05fb9ff7da123f747a6fdf88a6e247cb0"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093155392.jpg",
+          "source": "raw/powerbank/powerbank_1781093155392.jpg",
+          "timestamp_ms": 1781093155392,
+          "sanitized": false,
+          "sha256": "f9eda12d5db75dd0d598747afdcbd223d196d3208c635bf8c3fd98730fcd332e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093155641.jpg",
+          "source": "raw/powerbank/powerbank_1781093155641.jpg",
+          "timestamp_ms": 1781093155641,
+          "sanitized": false,
+          "sha256": "4e415c363905d491d343be868d06ace074e183a38fcb18aac27dba67b52e47ab"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093155903.jpg",
+          "source": "raw/powerbank/powerbank_1781093155903.jpg",
+          "timestamp_ms": 1781093155903,
+          "sanitized": false,
+          "sha256": "0cd49f8791111b280a4387e860753e9d1406ede3b9037093acb8672a4a171689"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093156141.jpg",
+          "source": "raw/powerbank/powerbank_1781093156141.jpg",
+          "timestamp_ms": 1781093156141,
+          "sanitized": false,
+          "sha256": "23a3d5e8242f1b553309e82bceb66569cfc63f277c0618b2b5b3d8a89243988f"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093156396.jpg",
+          "source": "raw/powerbank/powerbank_1781093156396.jpg",
+          "timestamp_ms": 1781093156396,
+          "sanitized": false,
+          "sha256": "7931137e7d61a261c8829e8951bc8acc444ad35c5aa0e55faf06f88dc80e3a2e"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093156650.jpg",
+          "source": "raw/powerbank/powerbank_1781093156650.jpg",
+          "timestamp_ms": 1781093156650,
+          "sanitized": false,
+          "sha256": "cf7ed830675cfa3c65c6f10f4164d087d4da5832086b43bdcc02c697f9899859"
+        },
+        {
+          "file": "train/powerbank/powerbank_1781093156903.jpg",
+          "source": "raw/powerbank/powerbank_1781093156903.jpg",
+          "timestamp_ms": 1781093156903,
+          "sanitized": false,
+          "sha256": "f7189d6703ab37968a3ef51b37c1fdc1c29a5a57a1caaefbc7c1fcfd19f166d4"
+        }
+      ],
+      "test_files": [
+        {
+          "file": "test/powerbank/powerbank_1781093159150.jpg",
+          "source": "raw/powerbank/powerbank_1781093159150.jpg",
+          "timestamp_ms": 1781093159150,
+          "sanitized": false,
+          "sha256": "be09f10f2d5a15cd2903e29fd68fb685ca5725535962497c69cc6268dd4d768c"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093159390.jpg",
+          "source": "raw/powerbank/powerbank_1781093159390.jpg",
+          "timestamp_ms": 1781093159390,
+          "sanitized": false,
+          "sha256": "804d15da8720f6d2f5be674e44407fe39cbb139e2882d6a8a508bec9d4defd86"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093159652.jpg",
+          "source": "raw/powerbank/powerbank_1781093159652.jpg",
+          "timestamp_ms": 1781093159652,
+          "sanitized": false,
+          "sha256": "795eb198e0ea6ce80b1f3af7b2d070f86e2a326cb53b690bcbdfc1a8c67e2e77"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093159904.jpg",
+          "source": "raw/powerbank/powerbank_1781093159904.jpg",
+          "timestamp_ms": 1781093159904,
+          "sanitized": false,
+          "sha256": "262cf91a6fc3aee693060d4d60c2311f18cfd9ad8bc7b4a5a38d3380db01959d"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093160153.jpg",
+          "source": "raw/powerbank/powerbank_1781093160153.jpg",
+          "timestamp_ms": 1781093160153,
+          "sanitized": false,
+          "sha256": "57529891a87193a4fcfd850a298315aced1b9fc738c58b156a130e8ca7fbeb59"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093160392.jpg",
+          "source": "raw/powerbank/powerbank_1781093160392.jpg",
+          "timestamp_ms": 1781093160392,
+          "sanitized": false,
+          "sha256": "ff9f26edd03ab06363f5c2473526217abf44a27e391cef7f29c848bac90fef16"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093160651.jpg",
+          "source": "raw/powerbank/powerbank_1781093160651.jpg",
+          "timestamp_ms": 1781093160651,
+          "sanitized": false,
+          "sha256": "82f4a2641a2f751626dbca223f2093d3aacc0f55355cbf655a16b9a7e3d2efe7"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093160903.jpg",
+          "source": "raw/powerbank/powerbank_1781093160903.jpg",
+          "timestamp_ms": 1781093160903,
+          "sanitized": false,
+          "sha256": "ac17dfa6bf06cb51c53f2c457634704b191ff820b2cee3aae32229716e248e8f"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093161140.jpg",
+          "source": "raw/powerbank/powerbank_1781093161140.jpg",
+          "timestamp_ms": 1781093161140,
+          "sanitized": false,
+          "sha256": "dbb2f871856e13b5b13221a6a9bb939740bc9aa4ad67bf7e01cc93ba0412c228"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093161391.jpg",
+          "source": "raw/powerbank/powerbank_1781093161391.jpg",
+          "timestamp_ms": 1781093161391,
+          "sanitized": false,
+          "sha256": "a2a40f70c8f08d44cb20b46475a756d668429e726ee4ec1bdef9fc4fa15e9c43"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093161645.jpg",
+          "source": "raw/powerbank/powerbank_1781093161645.jpg",
+          "timestamp_ms": 1781093161645,
+          "sanitized": false,
+          "sha256": "3c2ac129888c5cad904809fadd50eaf6f45c57f4e3338abdad77cd2ee00e8625"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093161901.jpg",
+          "source": "raw/powerbank/powerbank_1781093161901.jpg",
+          "timestamp_ms": 1781093161901,
+          "sanitized": false,
+          "sha256": "e350e7122c64641abf9f0e776c12c2ea39688faacf6df89322c5988e0f528059"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093162151.jpg",
+          "source": "raw/powerbank/powerbank_1781093162151.jpg",
+          "timestamp_ms": 1781093162151,
+          "sanitized": false,
+          "sha256": "d466a6766be7e336253d3e22c3f5b67d2a2822d4b8f8a8edea29484038fb14e7"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093162392.jpg",
+          "source": "raw/powerbank/powerbank_1781093162392.jpg",
+          "timestamp_ms": 1781093162392,
+          "sanitized": false,
+          "sha256": "0ef28c10a5f079e3557cf8f96b5ad6ee537f464a520c1f0d6388fdea5562c581"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093162650.jpg",
+          "source": "raw/powerbank/powerbank_1781093162650.jpg",
+          "timestamp_ms": 1781093162650,
+          "sanitized": false,
+          "sha256": "2edb686102b13269abb536b85a812ae2600f868c53cd04b7c240081112e73abe"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093162893.jpg",
+          "source": "raw/powerbank/powerbank_1781093162893.jpg",
+          "timestamp_ms": 1781093162893,
+          "sanitized": false,
+          "sha256": "de6ba831543c1a4b41b2b99f78808cea0c2b241f564264560941f2caf58d6730"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093163139.jpg",
+          "source": "raw/powerbank/powerbank_1781093163139.jpg",
+          "timestamp_ms": 1781093163139,
+          "sanitized": false,
+          "sha256": "dc163849b7c178c65f1d84c5f5bbf8521556ca10cbcd24017c96ffcb06d79257"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093163390.jpg",
+          "source": "raw/powerbank/powerbank_1781093163390.jpg",
+          "timestamp_ms": 1781093163390,
+          "sanitized": false,
+          "sha256": "63a0544b279e0abd3fd296e34f62ddb83870112d0950c5fa176f3a54ea024cbc"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093163641.jpg",
+          "source": "raw/powerbank/powerbank_1781093163641.jpg",
+          "timestamp_ms": 1781093163641,
+          "sanitized": false,
+          "sha256": "04dbbdfa7ed8af1287415f0e0f2ecaa4f2c80ceefa01d046917a76ceadd6018f"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093163895.jpg",
+          "source": "raw/powerbank/powerbank_1781093163895.jpg",
+          "timestamp_ms": 1781093163895,
+          "sanitized": false,
+          "sha256": "c9e22775c939d191e2e9d194b23f50a880c4a82c07e951e56033e198e0aee383"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093164154.jpg",
+          "source": "raw/powerbank/powerbank_1781093164154.jpg",
+          "timestamp_ms": 1781093164154,
+          "sanitized": false,
+          "sha256": "a8a6c26cb6f2dd77c8240937c758a709b4c43bb48adcc5bbb464e6afca86c8d5"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093164390.jpg",
+          "source": "raw/powerbank/powerbank_1781093164390.jpg",
+          "timestamp_ms": 1781093164390,
+          "sanitized": false,
+          "sha256": "ddca58a5aa0aa2397b6a9b3a05872a2d8fc1c2cc398799f498f51864c841867f"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093164640.jpg",
+          "source": "raw/powerbank/powerbank_1781093164640.jpg",
+          "timestamp_ms": 1781093164640,
+          "sanitized": false,
+          "sha256": "cfc0033a08d5c4a6af08ac7f91500990672f48295e9f575d9b2206f394618108"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093164891.jpg",
+          "source": "raw/powerbank/powerbank_1781093164891.jpg",
+          "timestamp_ms": 1781093164891,
+          "sanitized": false,
+          "sha256": "b63973db01545a779979f913f084c9b16b4a524d1b702433ddabd5d165ecaf37"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093165141.jpg",
+          "source": "raw/powerbank/powerbank_1781093165141.jpg",
+          "timestamp_ms": 1781093165141,
+          "sanitized": false,
+          "sha256": "059b58fff0f575fce1877d06876559b6ac98e750b7010b5a257aa2c168b52b8b"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093165390.jpg",
+          "source": "raw/powerbank/powerbank_1781093165390.jpg",
+          "timestamp_ms": 1781093165390,
+          "sanitized": false,
+          "sha256": "cbcb70d28c8aac33d5e0141f00013b58b9e4788069833369ef2ba7b9291b7bca"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093165640.jpg",
+          "source": "raw/powerbank/powerbank_1781093165640.jpg",
+          "timestamp_ms": 1781093165640,
+          "sanitized": false,
+          "sha256": "a6568ca60a69f0993e9b55379fa310167c8d1a4ee9caf7580b7c0a3880c7609b"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093165890.jpg",
+          "source": "raw/powerbank/powerbank_1781093165890.jpg",
+          "timestamp_ms": 1781093165890,
+          "sanitized": false,
+          "sha256": "8a61b938ca47b04b65ddffebe845937c9b42bfbaaf0314e2cc542074ccbc3ea5"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093166143.jpg",
+          "source": "raw/powerbank/powerbank_1781093166143.jpg",
+          "timestamp_ms": 1781093166143,
+          "sanitized": false,
+          "sha256": "ca37c7a5e54e0a5ae367386c132206e69c19627f0547defa1e5ab51040fea4bc"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093166390.jpg",
+          "source": "raw/powerbank/powerbank_1781093166390.jpg",
+          "timestamp_ms": 1781093166390,
+          "sanitized": false,
+          "sha256": "e86187a80ff363f29f63b332f4fcd40b609dd6653073261b798e2b7c5637e0bf"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093166645.jpg",
+          "source": "raw/powerbank/powerbank_1781093166645.jpg",
+          "timestamp_ms": 1781093166645,
+          "sanitized": false,
+          "sha256": "b05caa963a9f6e36ca5cdd2ae70a9eca77fe72ed91718560264904a31f99f98f"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093166894.jpg",
+          "source": "raw/powerbank/powerbank_1781093166894.jpg",
+          "timestamp_ms": 1781093166894,
+          "sanitized": false,
+          "sha256": "d80e47916cb406f952f7faab4131ebffa6495d4b898cd36927585bd0dca53f33"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093167143.jpg",
+          "source": "raw/powerbank/powerbank_1781093167143.jpg",
+          "timestamp_ms": 1781093167143,
+          "sanitized": false,
+          "sha256": "8efbf757a2638db9abdc079458c0d300bebda10ba8d46020074879db70150549"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093167391.jpg",
+          "source": "raw/powerbank/powerbank_1781093167391.jpg",
+          "timestamp_ms": 1781093167391,
+          "sanitized": false,
+          "sha256": "db62c41d7f5259ad62ee89f666e2481300420f9aedc59319ebded92bc071855c"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093167642.jpg",
+          "source": "raw/powerbank/powerbank_1781093167642.jpg",
+          "timestamp_ms": 1781093167642,
+          "sanitized": false,
+          "sha256": "546080305cce168730825180be7ac63e57723b9b0dec2b61be299b5b7577b247"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093167894.jpg",
+          "source": "raw/powerbank/powerbank_1781093167894.jpg",
+          "timestamp_ms": 1781093167894,
+          "sanitized": false,
+          "sha256": "17f48a917941dd7f11f2a397ed4b986e61f96cd3775235b29227b2ba4ad22d09"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093168143.jpg",
+          "source": "raw/powerbank/powerbank_1781093168143.jpg",
+          "timestamp_ms": 1781093168143,
+          "sanitized": false,
+          "sha256": "aa4cfe8b5b00c50cae442ea30c6cadd15e24ad657e15acbdba4b9a5a5c7d3afa"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093168394.jpg",
+          "source": "raw/powerbank/powerbank_1781093168394.jpg",
+          "timestamp_ms": 1781093168394,
+          "sanitized": false,
+          "sha256": "faa731c21f0a2d6dc59e870b1093c08ddf639ef495542b076933ae709c83b7a9"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093168642.jpg",
+          "source": "raw/powerbank/powerbank_1781093168642.jpg",
+          "timestamp_ms": 1781093168642,
+          "sanitized": false,
+          "sha256": "65714ef5cc8b449227092aabf86016c924144f5644114ee3b262b2b4a55c2e73"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093168893.jpg",
+          "source": "raw/powerbank/powerbank_1781093168893.jpg",
+          "timestamp_ms": 1781093168893,
+          "sanitized": false,
+          "sha256": "d2e418c60a2c3beb86cd3cc24eca834362ec523a53d0165bf9d4fb8752e65cca"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093169140.jpg",
+          "source": "raw/powerbank/powerbank_1781093169140.jpg",
+          "timestamp_ms": 1781093169140,
+          "sanitized": false,
+          "sha256": "53600a2427e1597150e6af918e82fc23b01331407e8ed436c670b38209df40e7"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093169392.jpg",
+          "source": "raw/powerbank/powerbank_1781093169392.jpg",
+          "timestamp_ms": 1781093169392,
+          "sanitized": false,
+          "sha256": "30dd427a79b393575b64967059b75bc099f449e5660afc1bd8391ec21af68c2c"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093169641.jpg",
+          "source": "raw/powerbank/powerbank_1781093169641.jpg",
+          "timestamp_ms": 1781093169641,
+          "sanitized": false,
+          "sha256": "cc945e21ce7f1921e85ddcdac077ff745f1f63d99029fce5cf85bad6e4edc63e"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093169890.jpg",
+          "source": "raw/powerbank/powerbank_1781093169890.jpg",
+          "timestamp_ms": 1781093169890,
+          "sanitized": false,
+          "sha256": "d44736ba5e8486b5fec40fb8881ac90a253a4e7b9f065bbeb82d6bbcf5101e3a"
+        },
+        {
+          "file": "test/powerbank/powerbank_1781093170141.jpg",
+          "source": "raw/powerbank/powerbank_1781093170141.jpg",
+          "timestamp_ms": 1781093170141,
+          "sanitized": false,
+          "sha256": "8678a751296ac57a305ffe6391c294c3bcc02fcc76fefffe96ed4a8c19e6faea"
+        }
+      ]
+    }
+  }
+}

@@ -93,7 +93,13 @@ static const char* TAG = "EDGECV";
 #define INPUT_H              96
 #define INPUT_C              3
 
-#define TENSOR_ARENA_SIZE    (256 * 1024)   /* 256 KB — sufficient for TinyML CNN */
+#define TENSOR_ARENA_SIZE     (96 * 1024)   /* 96 KB. AllocateTensors reports
+                                             * ~48 KB actually used; 96 KB
+                                             * leaves headroom while still
+                                             * fitting internal DRAM, which is
+                                             * the whole point — see the arena
+                                             * allocation below. Was 256 KB,
+                                             * which forced it into PSRAM. */
 
 /*
  * Run inference every N frames captured.
@@ -588,11 +594,39 @@ extern "C" void app_main(void)
     resolver.AddFullyConnected();
     resolver.AddLogistic();
 
+    /* -----------------------------------------------------------------------
+     * Tensor arena — INTERNAL DRAM first, PSRAM only as a fallback.
+     *
+     * This ordering matters far more than it looks, and it used to be the
+     * other way round. The arena holds every intermediate activation, and
+     * TFLM kernels walk it with poor cache locality. On the ESP32, PSRAM is
+     * quad-SPI behind a small cache, so scattered access to it runs roughly
+     * an order of magnitude slower than internal SRAM. This model only needs
+     * ~48 KB of arena, which fits internal DRAM comfortably — placing it in
+     * PSRAM paid a large latency cost for nothing.
+     *
+     * If the internal allocation fails, PSRAM still works, just slowly. The
+     * log line below reports which heap was used: check it before trusting
+     * any timing number, because the two are not comparable.
+     * ----------------------------------------------------------------------- */
     uint8_t* arena = (uint8_t*)heap_caps_malloc(
-        TENSOR_ARENA_SIZE, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+        TENSOR_ARENA_SIZE, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT);
+    const bool arena_internal = (arena != NULL);
     if (!arena) {
-        ESP_LOGE(TAG, "ABORT: tensor arena malloc failed"); return;
+        ESP_LOGW(TAG, "internal DRAM arena alloc failed (%u KB) — falling "
+                      "back to PSRAM; inference will be markedly slower",
+                 (unsigned)(TENSOR_ARENA_SIZE / 1024));
+        arena = (uint8_t*)heap_caps_malloc(
+            TENSOR_ARENA_SIZE, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
     }
+    if (!arena) {
+        ESP_LOGE(TAG, "ABORT: cannot allocate %u KB tensor arena",
+                 (unsigned)(TENSOR_ARENA_SIZE / 1024));
+        return;
+    }
+    ESP_LOGI(TAG, "Tensor arena: %u KB in %s",
+             (unsigned)(TENSOR_ARENA_SIZE / 1024),
+             arena_internal ? "INTERNAL DRAM" : "PSRAM (SLOW)");
 
     static tflite::MicroInterpreter interpreter(model, resolver, arena, TENSOR_ARENA_SIZE);
     if (interpreter.AllocateTensors() != kTfLiteOk) {

@@ -22,3 +22,37 @@ CONFIG_FATFS_LFN_HEAP=y
 # Main task stack — generous size since TFLite Micro keeps some state here
 # ---------------------------------------------------------------------------
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# ---------------------------------------------------------------------------
+# Performance (added in the Tier-0 perf pass)
+#
+# The original build ran at 160 MHz with -Og and full assertions, which is
+# a debug configuration. The 184 ms/frame figure in the README was measured
+# under it. Everything below is the release configuration.
+#
+# NOTE: these only take effect on a *fresh* sdkconfig. idf.py will not
+# retro-apply defaults to an existing sdkconfig — delete it and reconfigure:
+#     rm sdkconfig && idf.py reconfigure
+# ---------------------------------------------------------------------------
+
+# 160 -> 240 MHz. Straight 1.5x on everything CPU-bound.
+#
+# Both spellings are set deliberately. IDF 5.3 (what the README documents)
+# uses the ESP32_ prefix; IDF 5.4+/6.x renamed it to the target-agnostic
+# ESP_ prefix. An unknown symbol in a defaults file is a warning, not an
+# error, so setting both makes this work on either without editing.
+CONFIG_ESP32_DEFAULT_CPU_FREQ_240=y
+CONFIG_ESP_DEFAULT_CPU_FREQ_240=y
+
+# -Og -> -O2. TFLite Micro / esp-nn kernels are tight loops and benefit a lot.
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+
+# Assertions were at level 2 (full). TFLM asserts on every tensor access in
+# some kernels; silencing them removes that per-op overhead.
+CONFIG_COMPILER_OPTIMIZATION_ASSERTIONS_SILENT=y
+
+# PSRAM 40 -> 80 MHz. Requires flash at 80 MHz too (set below).
+# This is the one setting to revert first if the board becomes unstable:
+# 80 MHz quad PSRAM is not reliable on every ESP32 module revision.
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
